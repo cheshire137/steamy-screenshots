@@ -194,6 +194,8 @@ function setColorsFromImage() {
               css('color', 'rgb(' + primary + ')');
     $('h1').css('color', 'rgb(' + accent + ')');
     $('h2, a').css('color', 'rgb(' + secondary + ')');
+    $('li.active').css('background-color', 'rgb(' + accent + ')');
+    $('li.active a').css('color', 'rgb(' + primary + ')');
     $('.screenshot-wrapper').fadeIn('fast');
     if (imageList.find('li').length > 1) {
       imageList.fadeIn('fast');
@@ -204,14 +206,17 @@ function listImages(rss) {
   var imageList = $('.pagination');
   var pageNumber = 1;
   var steamScreenshot = $('.steam-screenshot');
+  var steamLink = $('.steam-link');
   $(rss).find('entry').each(function() {
     var entry = $(this);
     var imageUrl = entry.find('summary').text();
     var li = $('<li>');
     li.addClass('waves-effect');
     if (pageNumber === 1) {
+      var steamUrl = entry.find('link').attr('href');
       li.addClass('active');
       steamScreenshot.attr('src', imageUrl);
+      steamLink.attr('href', steamUrl);
       setColorsFromImage();
     }
     var link = $('<a>');

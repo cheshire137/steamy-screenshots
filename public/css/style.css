@@ -1,10 +1,37 @@
-img {
-    width: 49%;
-    float: right;
-    margin: 2.1rem 0 1.68rem 0;
+.steam-screenshot-card {
+  width: 49%;
+  float: right;
+  margin: 2.1rem 0 1.68rem 0;
+  background-color: transparent;
+}
+
+.steam-screenshot-card .card-content {
+  padding: 0;
+}
+
+.steam-screenshot-card img {
+  max-width: 100%;
 }
 
 .texts {
-    float: left;
-    width: 49%;
+  float: left;
+  width: 49%;
 }
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+.clearfix {
+  display: inline-block;
+}
+
+/* start commented backslash hack \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+/* close commented backslash hack */
