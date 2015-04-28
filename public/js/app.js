@@ -193,7 +193,7 @@ function setColorsFromImage() {
     $('body').css('background-color', 'rgb(' + background + ')').
               css('color', 'rgb(' + primary + ')');
     $('h1').css('color', 'rgb(' + accent + ')');
-    $('h2').css('color', 'rgb(' + secondary + ')');
+    $('h2, a').css('color', 'rgb(' + secondary + ')');
     $('.screenshot-wrapper').fadeIn('fast');
     if (imageList.find('li').length > 1) {
       imageList.fadeIn('fast');
@@ -227,6 +227,7 @@ $(function() {
   $.getJSON('/config.json', function(config) {
     rssServiceUrl = config.rssServiceUrl;
     $('.steam-user-lookup-form').fadeIn('fast');
+    $('#steam-user-name').focus();
   }).error(function(jqXHR, textStatus, error) {
     $('.error-message').text('Failed to load config.json').fadeIn('fast');
   });
