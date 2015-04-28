@@ -185,13 +185,28 @@ var ImageAnalyzer = function(image, callback) {
     return false;
   };
 };
-$(function() {
+function setColorsFromImage() {
   var originalUrl = $('img').attr('src');
   var url = '/image?url=' + encodeURIComponent(originalUrl);
   ImageAnalyzer(url, function(background, primary, secondary, accent) {
-    $('body').css('background-color', 'rgb(' + background + ')');
-    $('.primary').css('color', 'rgb(' + primary + ')');
-    $('.secondary').css('color', 'rgb(' + secondary + ')');
-    return $('.detail').css('color', 'rgb(' + accent + ')');
+    $('body').css('background-color', 'rgb(' + background + ')').
+              css('color', 'rgb(' + primary + ')');
+    $('h1').css('color', 'rgb(' + accent + ')');
+    $('h2').css('color', 'rgb(' + secondary + ')');
+  });
+}
+$(function() {
+  var rssServiceUrl;
+  $.getJSON('/config.json', function(config) {
+    rssServiceUrl = config.rssServiceUrl;
+    $('.steam-user-lookup-form').show();
+  }).error(function(jqXHR, textStatus, error) {
+    $('.error-message').text('Failed to load config.json').show();
+  });
+  $('.steam-user-lookup-form').on('submit', function(event) {
+    event.preventDefault();
+    var steamUser = $('#steam-user-name').val();
+    var url = rssServiceUrl + '?user=' + encodeURIComponent(steamUser);
+    console.log(url);
   });
 });
