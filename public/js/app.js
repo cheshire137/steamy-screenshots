@@ -185,7 +185,7 @@ var ImageAnalyzer = function(image, callback) {
     return false;
   };
 };
-function setColorsFromImage() {
+function setColorsFromImage(activeLi) {
   var originalUrl = $('.steam-screenshot').attr('src');
   var url = '/image?url=' + encodeURIComponent(originalUrl);
   var imageList = $('.pagination');
@@ -194,8 +194,12 @@ function setColorsFromImage() {
               css('color', 'rgb(' + accent + ')');
     $('h1').css('color', 'rgb(' + primary + ')');
     $('a').css('color', 'rgb(' + secondary + ')');
-    $('li.active').css('background-color', 'rgb(' + secondary + ')');
-    $('li.active a').css('color', 'rgb(' + primary + ')');
+    if (typeof activeLi === 'undefined') {
+      activeLi = $('li.active');
+    }
+    activeLi.css('background-color', 'rgb(' + secondary + ')');
+    activeLi.find('a').css('color', 'rgb(' + primary + ')');
+    activeLi.addClass('active');
     $('.screenshot-wrapper').fadeIn('fast');
     $('.extracting-colors').hide();
   });
@@ -215,6 +219,18 @@ function setImageHeight() {
   }
   img.css('max-height', getImageHeight());
 }
+function loadImageFromLink(link) {
+  console.log(link);
+  $('.pagination li.active').removeAttr('style').removeClass('active');
+  $('.screenshot-wrapper').fadeOut('fast');
+  var steamUrl = link.attr('data-steam-url');
+  var title = link.attr('data-title');
+  var imageUrl = link.attr('href');
+  $('.steam-screenshot').attr('src', imageUrl).load(setImageHeight);
+  $('.steam-link').attr('href', steamUrl);
+  $('.steam-screenshot-title').text(title);
+  setColorsFromImage(link.closest('li'));
+}
 function listImages(rss) {
   var imageList = $('.pagination');
   var pageNumber = 1;
@@ -225,20 +241,21 @@ function listImages(rss) {
   $(rss).find('entry').each(function() {
     var entry = $(this);
     var imageUrl = entry.find('summary').text();
+    var steamUrl = entry.find('link').attr('href');
+    var title = entry.find('title').text();
     var li = $('<li>');
     li.addClass('waves-effect');
     if (pageNumber === 1) {
-      var steamUrl = entry.find('link').attr('href');
-      var title = entry.find('title').text();
-      li.addClass('active');
       steamScreenshot.attr('src', imageUrl).load(setImageHeight);
       steamLink.attr('href', steamUrl);
       screenshotTitle.text(title);
-      setColorsFromImage();
+      setColorsFromImage(li);
     }
     var link = $('<a>');
-    link.attr('href', '#').attr('data-image', imageUrl);
-    link.text(pageNumber);
+    link.attr('href', imageUrl).
+         attr('data-steam-url', steamUrl).
+         attr('data-title', title).
+         text(pageNumber);
     li.append(link);
     pageNumber++;
     imageList.append(li);
@@ -255,6 +272,10 @@ $(function() {
     $('#steam-user-name').focus();
   }).error(function(jqXHR, textStatus, error) {
     $('.error-message').text('Failed to load config.json').fadeIn('fast');
+  });
+  $('body').on('click', '.pagination a', function(event) {
+    event.preventDefault();
+    loadImageFromLink($(this));
   });
   $(window).on('resize', setImageHeight);
   $('.steam-user-lookup-form').on('submit', function(event) {
