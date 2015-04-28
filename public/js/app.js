@@ -186,21 +186,40 @@ var ImageAnalyzer = function(image, callback) {
   };
 };
 function setColorsFromImage() {
-  var originalUrl = $('img').attr('src');
+  var originalUrl = $('.steam-screenshot').attr('src');
   var url = '/image?url=' + encodeURIComponent(originalUrl);
+  var imageList = $('.pagination');
   ImageAnalyzer(url, function(background, primary, secondary, accent) {
     $('body').css('background-color', 'rgb(' + background + ')').
               css('color', 'rgb(' + primary + ')');
     $('h1').css('color', 'rgb(' + accent + ')');
     $('h2').css('color', 'rgb(' + secondary + ')');
+    $('.screenshot-wrapper').fadeIn('fast');
+    if (imageList.find('li').length > 1) {
+      imageList.fadeIn('fast');
+    }
   });
 }
 function listImages(rss) {
-  var imageUrls = [];
+  var imageList = $('.pagination');
+  var pageNumber = 1;
+  var steamScreenshot = $('.steam-screenshot');
   $(rss).find('entry').each(function() {
     var entry = $(this);
     var imageUrl = entry.find('summary').text();
-    imageUrls.push(imageUrl);
+    var li = $('<li>');
+    li.addClass('waves-effect');
+    if (pageNumber === 1) {
+      li.addClass('active');
+      steamScreenshot.attr('src', imageUrl);
+      setColorsFromImage();
+    }
+    var link = $('<a>');
+    link.attr('href', '#').attr('data-image', imageUrl);
+    link.text(pageNumber);
+    li.append(link);
+    pageNumber++;
+    imageList.append(li);
   });
 }
 $(function() {
