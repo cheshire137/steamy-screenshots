@@ -14,3 +14,9 @@ is hosted.
     rackup
 
 Visit [localhost:9292](http://localhost:9292).
+
+## How to Deploy to Heroku
+
+After pushing to Heroku, you need to set the `RSS_SERVICE_URL` environment variable:
+
+    heroku config:set RSS_SERVICE_URL=http://url-to-steam-screenshot-rss.com
