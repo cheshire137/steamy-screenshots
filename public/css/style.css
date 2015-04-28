@@ -1,3 +1,11 @@
+body > .container {
+  padding-top: 40px;
+}
+
+.card-panel {
+  background-color: transparent;
+}
+
 .screenshot-wrapper {
   margin: 0 auto;
 }
@@ -7,10 +15,14 @@
   display: inline-block;
 }
 
+.pagination li a {
+  display: block;
+}
+
 .steam-screenshot-title {
   font-size: 1.64rem;
   line-height: 1.804rem;
-  margin: 0.82rem 0 0.656rem 0;
+  margin: 0 0 0.656rem 0;
 }
 
 .clearfix:after {

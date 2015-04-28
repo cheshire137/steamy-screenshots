@@ -191,25 +191,32 @@ function setColorsFromImage(activeLi) {
   var imageList = $('.pagination');
   ImageAnalyzer(url, function(background, primary, secondary, accent) {
     $('body').css('background-color', 'rgb(' + background + ')').
-              css('color', 'rgb(' + accent + ')');
-    $('h1').css('color', 'rgb(' + primary + ')');
+              css('color', 'rgb(' + accent + ')').
+              attr('data-secondary', secondary);
+    $('.top-nav').css('background-color', 'rgb(' + primary + ')');
+    $('.page-title').css('color', 'rgb(' + background + ')');
     $('a').css('color', 'rgb(' + secondary + ')');
     if (typeof activeLi === 'undefined') {
       activeLi = $('li.active');
     }
     activeLi.css('background-color', 'rgb(' + secondary + ')');
-    activeLi.find('a').css('color', 'rgb(' + primary + ')');
+    activeLi.find('a').css('color', 'rgb(' + background + ')');
     activeLi.addClass('active');
     $('.screenshot-wrapper').fadeIn('fast');
     $('.extracting-colors').hide();
   });
 }
 function getImageHeight() {
-  var topOffset = $('h1.header').height();
+  var topOffset = $('header').height();
   var viewportHeight = $(window).height();
   var imageListHeight = $('.pagination').height();
   var cardActionHeight = 63;
-  var imageHeight = viewportHeight - topOffset - imageListHeight - cardActionHeight;
+  var steamLinkHeight = 22;
+  var titleHeight = 27;
+  var topPadding = 80;
+  var imageHeight = viewportHeight - topOffset - imageListHeight -
+                    cardActionHeight - steamLinkHeight - titleHeight -
+                    topPadding;
   return imageHeight;
 }
 function setImageHeight() {
@@ -220,7 +227,10 @@ function setImageHeight() {
   img.css('max-height', getImageHeight());
 }
 function loadImageFromLink(link) {
-  console.log(link);
+  $('.extracting-colors').show();
+  var oldLink = $('.pagination li.active a');
+  var oldLinkColor = $('body').attr('data-secondary');
+  oldLink.removeAttr('style').css('color', 'rgb(' + oldLinkColor + ')');
   $('.pagination li.active').removeAttr('style').removeClass('active');
   $('.screenshot-wrapper').fadeOut('fast');
   var steamUrl = link.attr('data-steam-url');
