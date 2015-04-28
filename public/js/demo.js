@@ -3,7 +3,11 @@
 
   $(function() {
     var color;
-    return color = ImageAnalyzer('sample.jpg', function(bgcolor, primaryColor, secondaryColor, detailColor) {
+    var originalUrl = $('img').attr('src');
+    console.log(originalUrl);
+    var url = '/image?url=' + encodeURIComponent(originalUrl);
+    console.log(url);
+    return color = ImageAnalyzer(url, function(bgcolor, primaryColor, secondaryColor, detailColor) {
       $('#frame').css('background-color', 'rgb(' + bgcolor + ')');
       $('.primary').css('color', 'rgb(' + primaryColor + ')');
       $('.secondary').css('color', 'rgb(' + secondaryColor + ')');
