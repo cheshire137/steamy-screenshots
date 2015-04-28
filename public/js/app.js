@@ -195,18 +195,29 @@ function setColorsFromImage() {
     $('h2').css('color', 'rgb(' + secondary + ')');
   });
 }
+function listImages(rss) {
+  var imageUrls = [];
+  $(rss).find('entry').each(function() {
+    var entry = $(this);
+    var imageUrl = entry.find('summary').text();
+    imageUrls.push(imageUrl);
+  });
+}
 $(function() {
   var rssServiceUrl;
   $.getJSON('/config.json', function(config) {
     rssServiceUrl = config.rssServiceUrl;
-    $('.steam-user-lookup-form').show();
+    $('.steam-user-lookup-form').fadeIn('fast');
   }).error(function(jqXHR, textStatus, error) {
-    $('.error-message').text('Failed to load config.json').show();
+    $('.error-message').text('Failed to load config.json').fadeIn('fast');
   });
   $('.steam-user-lookup-form').on('submit', function(event) {
     event.preventDefault();
+    $(this).fadeOut('fast');
     var steamUser = $('#steam-user-name').val();
-    var url = rssServiceUrl + '?user=' + encodeURIComponent(steamUser);
-    console.log(url);
+    var feedUrl = rssServiceUrl + '?user=' + encodeURIComponent(steamUser);
+    $.get(feedUrl, function(rss) {
+      listImages(rss);
+    });
   });
 });
