@@ -191,22 +191,37 @@ function setColorsFromImage() {
   var imageList = $('.pagination');
   ImageAnalyzer(url, function(background, primary, secondary, accent) {
     $('body').css('background-color', 'rgb(' + background + ')').
-              css('color', 'rgb(' + primary + ')');
-    $('h1').css('color', 'rgb(' + accent + ')');
-    $('h2, a').css('color', 'rgb(' + secondary + ')');
-    $('li.active').css('background-color', 'rgb(' + accent + ')');
+              css('color', 'rgb(' + accent + ')');
+    $('h1').css('color', 'rgb(' + primary + ')');
+    $('a').css('color', 'rgb(' + secondary + ')');
+    $('li.active').css('background-color', 'rgb(' + secondary + ')');
     $('li.active a').css('color', 'rgb(' + primary + ')');
     $('.screenshot-wrapper').fadeIn('fast');
-    if (imageList.find('li').length > 1) {
-      imageList.fadeIn('fast');
-    }
+    $('.extracting-colors').hide();
   });
+}
+function getImageHeight() {
+  var topOffset = $('h1.header').height();
+  var viewportHeight = $(window).height();
+  var imageListHeight = $('.pagination').height();
+  var cardActionHeight = 63;
+  var imageHeight = viewportHeight - topOffset - imageListHeight - cardActionHeight;
+  return imageHeight;
+}
+function setImageHeight() {
+  var img = $('.steam-screenshot');
+  if (img.attr('src') === '') {
+    return;
+  }
+  img.css('max-height', getImageHeight());
 }
 function listImages(rss) {
   var imageList = $('.pagination');
   var pageNumber = 1;
   var steamScreenshot = $('.steam-screenshot');
   var steamLink = $('.steam-link');
+  var screenshotTitle = $('.steam-screenshot-title');
+  $('.extracting-colors').show();
   $(rss).find('entry').each(function() {
     var entry = $(this);
     var imageUrl = entry.find('summary').text();
@@ -214,9 +229,11 @@ function listImages(rss) {
     li.addClass('waves-effect');
     if (pageNumber === 1) {
       var steamUrl = entry.find('link').attr('href');
+      var title = entry.find('title').text();
       li.addClass('active');
-      steamScreenshot.attr('src', imageUrl);
+      steamScreenshot.attr('src', imageUrl).load(setImageHeight);
       steamLink.attr('href', steamUrl);
+      screenshotTitle.text(title);
       setColorsFromImage();
     }
     var link = $('<a>');
@@ -226,6 +243,9 @@ function listImages(rss) {
     pageNumber++;
     imageList.append(li);
   });
+  if (imageList.find('li').length > 1) {
+    imageList.fadeIn('fast');
+  }
 }
 $(function() {
   var rssServiceUrl;
@@ -236,12 +256,16 @@ $(function() {
   }).error(function(jqXHR, textStatus, error) {
     $('.error-message').text('Failed to load config.json').fadeIn('fast');
   });
+  $(window).on('resize', setImageHeight);
   $('.steam-user-lookup-form').on('submit', function(event) {
     event.preventDefault();
     $(this).fadeOut('fast');
     var steamUser = $('#steam-user-name').val();
     var feedUrl = rssServiceUrl + '?user=' + encodeURIComponent(steamUser);
+    var loadingMessage = $('.loading-steam-user');
+    loadingMessage.show();
     $.get(feedUrl, function(rss) {
+      loadingMessage.hide();
       listImages(rss);
     });
   });

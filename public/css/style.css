@@ -1,21 +1,11 @@
-.steam-screenshot-card {
-  width: 49%;
-  float: right;
-  margin: 2.1rem 0 1.68rem 0;
-  background-color: transparent;
-}
-
-.steam-screenshot-card .card-content {
-  padding: 0;
-}
-
-.steam-screenshot-card img {
+.steam-screenshot {
   max-width: 100%;
 }
 
-.texts {
-  float: left;
-  width: 49%;
+.steam-screenshot-title {
+  font-size: 1.64rem;
+  line-height: 1.804rem;
+  margin: 0.82rem 0 0.656rem 0;
 }
 
 .clearfix:after {
