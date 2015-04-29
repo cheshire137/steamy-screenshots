@@ -30,12 +30,23 @@ body > .container {
   margin-right: 1em;
 }
 
+.top-nav .copied-message {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 10em;
+  text-align: center;
+  margin-left: -5em;
+}
+
 .metadata .swatch {
   display: inline-block;
+  cursor: pointer;
   width: 1.4rem;
   height: 1.4rem;
   vertical-align: middle;
   border-radius: 2px;
+  border: 1px solid #fefefe;
   margin-right: 0.3em;
   -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16),0 2px 10px 0 rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
@@ -44,6 +55,7 @@ body > .container {
 
 #secondary-steam-user-lookup-form .steam-user-name {
   margin-left: 0.5em;
+  width: 9em;
 }
 
 label, label i {

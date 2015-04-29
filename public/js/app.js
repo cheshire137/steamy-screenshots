@@ -187,6 +187,23 @@ var ImageAnalyzer = function(image, callback) {
     return false;
   };
 };
+function setupCopyTooltip(el) {
+  var copiedMessage = $('.copied-message');
+  copiedMessage.hide();
+  var client = new ZeroClipboard(el);
+  client.on('ready', function(readyEvent) {
+    client.on('copy', function(event) {
+      var clipboard = event.clipboardData;
+      clipboard.setData('text/plain', el.attr('data-tooltip'));
+    });
+    client.on('aftercopy', function(event) {
+      copiedMessage.fadeIn('fast');
+      setTimeout(function() {
+        copiedMessage.fadeOut('fast');
+      }, 2000);
+    });
+  });
+}
 function setColorsFromImage(activeLi) {
   var originalUrl = $('.steam-screenshot').attr('src');
   var url = '/image?url=' + encodeURIComponent(originalUrl);
@@ -196,7 +213,7 @@ function setColorsFromImage(activeLi) {
               css('color', 'rgb(' + accent + ')').
               attr('data-secondary', secondary);
     $('.top-nav, input').css('background-color', 'rgb(' + primary + ')');
-    $('.page-title, input, nav .input-field label.active i').
+    $('.page-title, .top-nav, input, nav .input-field label.active i').
         css('color', 'rgb(' + background + ')');
     $('a').css('color', 'rgb(' + secondary + ')');
     if (typeof activeLi === 'undefined') {
@@ -207,14 +224,22 @@ function setColorsFromImage(activeLi) {
     activeLi.addClass('active');
     $('.screenshot-wrapper').fadeIn('fast');
     $('.extracting-colors').hide();
-    $('.background-swatch').css('background-color', 'rgb(' + background + ')').
-                            attr('data-tooltip', 'rgb(' + background + ')');
-    $('.secondary-swatch').css('background-color', 'rgb(' + secondary + ')').
-                           attr('data-tooltip', 'rgb(' + secondary + ')');
-    $('.primary-swatch').css('background-color', 'rgb(' + primary + ')').
-                         attr('data-tooltip', 'rgb(' + primary + ')');
-    $('.accent-swatch').css('background-color', 'rgb(' + accent + ')').
-                        attr('data-tooltip', 'rgb(' + accent + ')');
+    var bgSwatch = $('.background-swatch');
+    bgSwatch.css('background-color', 'rgb(' + background + ')').
+             attr('data-tooltip', 'rgb(' + background + ')');
+    setupCopyTooltip(bgSwatch);
+    var secondarySwatch = $('.secondary-swatch');
+    secondarySwatch.css('background-color', 'rgb(' + secondary + ')').
+                    attr('data-tooltip', 'rgb(' + secondary + ')');
+    setupCopyTooltip(secondarySwatch);
+    var primarySwatch = $('.primary-swatch');
+    primarySwatch.css('background-color', 'rgb(' + primary + ')').
+                  attr('data-tooltip', 'rgb(' + primary + ')');
+    setupCopyTooltip(primarySwatch);
+    var accentSwatch = $('.accent-swatch');
+    accentSwatch.css('background-color', 'rgb(' + accent + ')').
+                 attr('data-tooltip', 'rgb(' + accent + ')');
+    setupCopyTooltip(accentSwatch);
   });
 }
 function getImageHeight() {
