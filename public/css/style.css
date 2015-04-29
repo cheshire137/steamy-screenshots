@@ -25,6 +25,14 @@ body > .container {
   margin: 0 0 0.656rem 0;
 }
 
+#secondary-steam-user-lookup-form .steam-user-name {
+  margin-left: 0.5em;
+}
+
+label, label i {
+  cursor: pointer;
+}
+
 .clearfix:after {
   visibility: hidden;
   display: block;
