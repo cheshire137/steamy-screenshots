@@ -12,6 +12,14 @@
       <div class="container">
         <div class="nav-wrapper">
           <span class="page-title">Steamy Screenshots</span>
+          <form class="right steam-user-lookup-form" id="secondary-steam-user-lookup-form" style="display: none">
+            <div class="input-field">
+              <label for="steam-user-name2">
+                <i class="fa fa-steam left"></i>
+              </label>
+              <input type="text" placeholder="Steam user name" id="steam-user-name2" class="steam-user-name">
+            </div>
+          </form>
         </div>
       </div>
     </nav>
@@ -26,11 +34,11 @@
       <i class="fa fa-spinner fa-spin"></i>
       Extracting colors...
     </div>
-    <form class="col s12 steam-user-lookup-form" style="display: none">
+    <form class="col s12 steam-user-lookup-form" id="main-steam-user-lookup-form" style="display: none">
       <div class="row">
         <div class="input-field col s8">
           <i class="fa fa-steam prefix"></i>
-          <input type="text" id="steam-user-name">
+          <input type="text" id="steam-user-name" class="steam-user-name">
           <label for="steam-user-name">Steam user name</label>
         </div>
         <div class="col s4">

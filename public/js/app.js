@@ -194,8 +194,9 @@ function setColorsFromImage(activeLi) {
     $('body').css('background-color', 'rgb(' + background + ')').
               css('color', 'rgb(' + accent + ')').
               attr('data-secondary', secondary);
-    $('.top-nav').css('background-color', 'rgb(' + primary + ')');
-    $('.page-title').css('color', 'rgb(' + background + ')');
+    $('.top-nav, input').css('background-color', 'rgb(' + primary + ')');
+    $('.page-title, input, nav .input-field label.active i').
+        css('color', 'rgb(' + background + ')');
     $('a').css('color', 'rgb(' + secondary + ')');
     if (typeof activeLi === 'undefined') {
       activeLi = $('li.active');
@@ -275,20 +276,30 @@ function listImages(rss) {
     imageList.fadeIn('fast');
   }
 }
+function resetUser() {
+  $('.screenshot-wrapper').fadeOut('fast');
+  $('.pagination').empty().fadeOut('fast');
+  $('body, a, .page-title, .top-nav, nav .input-field label.active i, input').
+      removeAttr('style');
+  $('#secondary-steam-user-lookup-form').fadeOut('fast').
+                                         find('.steam-user-name').val('');
+}
 function fetchSteamUser(steamUser) {
   var rssServiceUrl = SteamyConfig.rssServiceUrl;
   var feedUrl = rssServiceUrl + '?user=' + encodeURIComponent(steamUser);
   var loadingMessage = $('.loading-steam-user');
   loadingMessage.show();
-  $('.screenshot-wrapper').fadeOut('fast');
-  $('.pagination').empty().fadeOut('fast');
+  resetUser();
+  $('#secondary-steam-user-lookup-form').fadeIn('fast').
+                                         find('.steam-user-name').val(steamUser);
   $.get(feedUrl, function(rss) {
     loadingMessage.hide();
     listImages(rss);
   });
 }
 function showSteamForm() {
-  $('.steam-user-lookup-form').fadeIn('fast');
+  resetUser();
+  $('#main-steam-user-lookup-form').fadeIn('fast');
   $('#steam-user-name').focus();
 }
 function parseLocation() {
@@ -330,7 +341,11 @@ $(function() {
   $('.steam-user-lookup-form').on('submit', function(event) {
     event.preventDefault();
     $(this).fadeOut('fast');
-    var steamUser = $('#steam-user-name').val();
-    window.location.hash = 'steam/' + steamUser;
+    var steamUser = $.trim($('#steam-user-name').val());
+    if (steamUser === '') {
+      window.location.hash = '';
+    } else {
+      window.location.hash = 'steam/' + steamUser;
+    }
   });
 });
