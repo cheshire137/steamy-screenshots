@@ -2,7 +2,7 @@ require 'open-uri'
 require 'json'
 
 get '/' do
-  redirect '/index.html'
+  File.read('public/index.html')
 end
 
 get '/image' do

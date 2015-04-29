@@ -1,3 +1,4 @@
+var SteamyConfig = {};
 var ImageAnalyzer = function(image, callback) {
   var bgcolor, detailColor, findEdgeColor, findTextColors, init, isBlackOrWhite, isContrastingColor, isDarkColor, isDistinct, primaryColor, secondaryColor;
   bgcolor = primaryColor = secondaryColor = detailColor = null;
@@ -274,30 +275,62 @@ function listImages(rss) {
     imageList.fadeIn('fast');
   }
 }
+function fetchSteamUser(steamUser) {
+  var rssServiceUrl = SteamyConfig.rssServiceUrl;
+  var feedUrl = rssServiceUrl + '?user=' + encodeURIComponent(steamUser);
+  var loadingMessage = $('.loading-steam-user');
+  loadingMessage.show();
+  $('.screenshot-wrapper').fadeOut('fast');
+  $('.pagination').empty().fadeOut('fast');
+  $.get(feedUrl, function(rss) {
+    loadingMessage.hide();
+    listImages(rss);
+  });
+}
+function showSteamForm() {
+  $('.steam-user-lookup-form').fadeIn('fast');
+  $('#steam-user-name').focus();
+}
+function parseLocation() {
+  var hash = window.location.hash;
+  console.log('location:', hash);
+  var steamRoutePrefix = 'steam/';
+  var steamIndex = hash.indexOf(steamRoutePrefix);
+  if (steamIndex > -1) {
+    var startIndex = steamIndex + steamRoutePrefix.length;
+    var nextSlashIndex = hash.indexOf('/', startIndex);
+    var endIndex;
+    if (nextSlashIndex > -1) {
+      endIndex = Math.min(nextSlashIndex, hash.length);
+    } else {
+      endIndex = hash.length;
+    }
+    var steamUser = hash.slice(startIndex, endIndex);
+    fetchSteamUser(steamUser);
+  } else {
+    showSteamForm();
+  }
+}
 $(function() {
-  var rssServiceUrl;
   $.getJSON('/config.json', function(config) {
-    rssServiceUrl = config.rssServiceUrl;
-    $('.steam-user-lookup-form').fadeIn('fast');
-    $('#steam-user-name').focus();
+    SteamyConfig = config;
+    parseLocation();
   }).error(function(jqXHR, textStatus, error) {
     $('.error-message').text('Failed to load config.json').fadeIn('fast');
   });
+
   $('body').on('click', '.pagination a', function(event) {
     event.preventDefault();
     loadImageFromLink($(this));
   });
-  $(window).on('resize', setImageHeight);
+
+  $(window).on('resize', setImageHeight).
+            on('hashchange', parseLocation);
+
   $('.steam-user-lookup-form').on('submit', function(event) {
     event.preventDefault();
     $(this).fadeOut('fast');
     var steamUser = $('#steam-user-name').val();
-    var feedUrl = rssServiceUrl + '?user=' + encodeURIComponent(steamUser);
-    var loadingMessage = $('.loading-steam-user');
-    loadingMessage.show();
-    $.get(feedUrl, function(rss) {
-      loadingMessage.hide();
-      listImages(rss);
-    });
+    window.location.hash = 'steam/' + steamUser;
   });
 });
