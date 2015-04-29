@@ -243,9 +243,12 @@ function loadImageFromLink(link) {
   $('.steam-screenshot-title').text(title);
   setColorsFromImage(link.closest('li'));
 }
-function listImages(rss) {
+function listImages(rss, page) {
   var imageList = $('.pagination');
-  var pageNumber = 1;
+  var pageIndex = 1;
+  if (typeof page === 'undefined') {
+    page = 1;
+  }
   var steamScreenshot = $('.steam-screenshot');
   var steamLink = $('.steam-link');
   var screenshotTitle = $('.steam-screenshot-title');
@@ -257,7 +260,7 @@ function listImages(rss) {
     var title = entry.find('title').text();
     var li = $('<li>');
     li.addClass('waves-effect');
-    if (pageNumber === 1) {
+    if (pageIndex === page) {
       steamScreenshot.attr('src', imageUrl).load(setImageHeight);
       steamLink.attr('href', steamUrl);
       screenshotTitle.text(title);
@@ -267,9 +270,9 @@ function listImages(rss) {
     link.attr('href', imageUrl).
          attr('data-steam-url', steamUrl).
          attr('data-title', title).
-         text(pageNumber);
+         text(pageIndex);
     li.append(link);
-    pageNumber++;
+    pageIndex++;
     imageList.append(li);
   });
   if (imageList.find('li').length > 1) {
@@ -284,17 +287,18 @@ function resetUser() {
   $('#secondary-steam-user-lookup-form').fadeOut('fast').
                                          find('.steam-user-name').val('');
 }
-function fetchSteamUser(steamUser) {
+function fetchSteamUser(steamUser, page) {
   var rssServiceUrl = SteamyConfig.rssServiceUrl;
   var feedUrl = rssServiceUrl + '?user=' + encodeURIComponent(steamUser);
   var loadingMessage = $('.loading-steam-user');
   loadingMessage.show();
+  $('#main-steam-user-lookup-form').fadeOut('fast');
   resetUser();
   $('#secondary-steam-user-lookup-form').fadeIn('fast').
                                          find('.steam-user-name').val(steamUser);
   $.get(feedUrl, function(rss) {
     loadingMessage.hide();
-    listImages(rss);
+    listImages(rss, page);
   });
 }
 function showSteamForm() {
@@ -302,13 +306,11 @@ function showSteamForm() {
   $('#main-steam-user-lookup-form').fadeIn('fast');
   $('#steam-user-name').focus();
 }
-function parseLocation() {
+function extractUrlBit(routePrefix) {
   var hash = window.location.hash;
-  console.log('location:', hash);
-  var steamRoutePrefix = 'steam/';
-  var steamIndex = hash.indexOf(steamRoutePrefix);
-  if (steamIndex > -1) {
-    var startIndex = steamIndex + steamRoutePrefix.length;
+  var routePrefixIndex = hash.indexOf(routePrefix);
+  if (routePrefixIndex > -1) {
+    var startIndex = routePrefixIndex + routePrefix.length;
     var nextSlashIndex = hash.indexOf('/', startIndex);
     var endIndex;
     if (nextSlashIndex > -1) {
@@ -316,10 +318,31 @@ function parseLocation() {
     } else {
       endIndex = hash.length;
     }
-    var steamUser = hash.slice(startIndex, endIndex);
-    fetchSteamUser(steamUser);
-  } else {
+    return hash.slice(startIndex, endIndex);
+  }
+  return '';
+}
+function getSteamUserFromUrl() {
+  return extractUrlBit('steam/');
+}
+function getPageFromUrl() {
+  var pageStr = extractUrlBit('page/');
+  if (pageStr === '') {
+    return -1;
+  }
+  return parseInt(pageStr, 10);
+}
+function parseLocation() {
+  var steamUser = getSteamUserFromUrl();
+  if (steamUser === '') {
     showSteamForm();
+  } else {
+    var page = getPageFromUrl();
+    if (page > 0) {
+      fetchSteamUser(steamUser, page);
+    } else {
+      fetchSteamUser(steamUser);
+    }
   }
 }
 $(function() {
@@ -332,7 +355,13 @@ $(function() {
 
   $('body').on('click', '.pagination a', function(event) {
     event.preventDefault();
-    loadImageFromLink($(this));
+    var link = $(this);
+    var hash = 'steam/' + getSteamUserFromUrl();
+    var page = parseInt($.trim(link.text()), 10);
+    if (page !== 1) {
+      hash += '/page/' + page;
+    }
+    window.location.hash = hash;
   });
 
   $(window).on('resize', setImageHeight).
