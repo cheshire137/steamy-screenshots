@@ -207,6 +207,14 @@ function setColorsFromImage(activeLi) {
     activeLi.addClass('active');
     $('.screenshot-wrapper').fadeIn('fast');
     $('.extracting-colors').hide();
+    $('.background-swatch').css('background-color', 'rgb(' + background + ')').
+                            attr('data-tooltip', 'rgb(' + background + ')');
+    $('.secondary-swatch').css('background-color', 'rgb(' + secondary + ')').
+                           attr('data-tooltip', 'rgb(' + secondary + ')');
+    $('.primary-swatch').css('background-color', 'rgb(' + primary + ')').
+                         attr('data-tooltip', 'rgb(' + primary + ')');
+    $('.accent-swatch').css('background-color', 'rgb(' + accent + ')').
+                        attr('data-tooltip', 'rgb(' + accent + ')');
   });
 }
 function getImageHeight() {
@@ -283,8 +291,8 @@ function listImages(page) {
 function resetUser() {
   $('.screenshot-wrapper').fadeOut('fast');
   $('.pagination').empty().fadeOut('fast');
-  $('body, a, .page-title, .top-nav, nav .input-field label.active i, input').
-      removeAttr('style');
+  $('body, a, .page-title, .top-nav, nav .input-field label.active i, ' +
+    'input, .metadata .swatch').removeAttr('style');
   $('#secondary-steam-user-lookup-form').fadeOut('fast').
                                          find('.steam-user-name').val('');
 }

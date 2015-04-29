@@ -25,6 +25,23 @@ body > .container {
   margin: 0 0 0.656rem 0;
 }
 
+.metadata .steam-link {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.metadata .swatch {
+  display: inline-block;
+  width: 1.4rem;
+  height: 1.4rem;
+  vertical-align: middle;
+  border-radius: 2px;
+  margin-right: 0.3em;
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16),0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16),0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
 #secondary-steam-user-lookup-form .steam-user-name {
   margin-left: 0.5em;
 }
