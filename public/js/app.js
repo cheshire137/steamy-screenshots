@@ -205,46 +205,60 @@ function setupCopyTooltip(el) {
     });
   });
 }
+function setCreatePaletteLink() {
+  var colourLoversUrl = 'http://www.colourlovers.com/palettes/add?colors=';
+  var hexCodes = [];
+  for (var colorType in Colors) {
+    var hex = Colors[colorType];
+    hexCodes.push(hex.replace(/^#/, ''));
+  }
+  colourLoversUrl += hexCodes.join(',');
+  $('.colourlovers-link').attr('href', colourLoversUrl);
+}
 function setSwatchColors() {
+  setCreatePaletteLink();
   var bgSwatch = $('.background-swatch');
-  bgSwatch.css('background-color', 'rgb(' + Colors.background + ')').
-           attr('data-tooltip', 'rgb(' + Colors.background + ')');
+  bgSwatch.css('background-color', Colors.background).
+           attr('data-tooltip', Colors.background);
   setupCopyTooltip(bgSwatch);
   var secondarySwatch = $('.secondary-swatch');
-  secondarySwatch.css('background-color', 'rgb(' + Colors.secondary + ')').
-                  attr('data-tooltip', 'rgb(' + Colors.secondary + ')');
+  secondarySwatch.css('background-color', Colors.secondary).
+                  attr('data-tooltip', Colors.secondary);
   setupCopyTooltip(secondarySwatch);
   var primarySwatch = $('.primary-swatch');
-  primarySwatch.css('background-color', 'rgb(' + Colors.primary + ')').
-                attr('data-tooltip', 'rgb(' + Colors.primary + ')');
+  primarySwatch.css('background-color', Colors.primary).
+                attr('data-tooltip', Colors.primary);
   setupCopyTooltip(primarySwatch);
   var accentSwatch = $('.accent-swatch');
-  accentSwatch.css('background-color', 'rgb(' + Colors.accent + ')').
-               attr('data-tooltip', 'rgb(' + Colors.accent + ')');
+  accentSwatch.css('background-color', Colors.accent).
+               attr('data-tooltip', Colors.accent);
   setupCopyTooltip(accentSwatch);
+}
+function translateColors(background, primary, secondary, accent) {
+  Colors.background = tinycolor('rgb(' + background + ')').toHexString();
+  Colors.primary = tinycolor('rgb(' + primary + ')').toHexString();
+  Colors.secondary = tinycolor('rgb(' + secondary + ')').toHexString();
+  Colors.accent = tinycolor('rgb(' + accent + ')').toHexString();
 }
 function setColorsFromImage(activeLi) {
   var originalUrl = $('.steam-screenshot').attr('src');
   var url = '/image?url=' + encodeURIComponent(originalUrl);
   var imageList = $('.pagination');
   ImageAnalyzer(url, function(background, primary, secondary, accent) {
-    Colors.background = background;
-    Colors.primary = primary;
-    Colors.secondary = secondary;
-    Colors.accent = accent;
-    $('body').css('background-color', 'rgb(' + background + ')').
-              css('color', 'rgb(' + accent + ')').
+    translateColors(background, primary, secondary, accent);
+    $('body').css('background-color', Colors.background).
+              css('color', Colors.accent).
               attr('data-secondary', secondary);
     $('.top-nav, input, #steam-friends-dropdown').
-        css('background-color', 'rgb(' + primary + ')');
+        css('background-color', Colors.primary);
     $('.page-title, .top-nav, input, nav .input-field label.active i').
-        css('color', 'rgb(' + background + ')');
-    $('a').css('color', 'rgb(' + secondary + ')');
+        css('color', Colors.background);
+    $('a').css('color', Colors.secondary);
     if (typeof activeLi === 'undefined') {
       activeLi = $('li.active');
     }
-    activeLi.css('background-color', 'rgb(' + secondary + ')');
-    activeLi.find('a').css('color', 'rgb(' + background + ')');
+    activeLi.css('background-color', Colors.secondary);
+    activeLi.find('a').css('color', Colors.background);
     activeLi.addClass('active');
     $('.screenshot-wrapper').fadeIn('fast');
     $('.extracting-colors').hide();
@@ -356,7 +370,7 @@ function fetchSteamFriends(steamUser) {
     if (friends.length > 0) {
       $('.steam-user-nav').fadeIn('fast');
       if (Colors.secondary) {
-        $('a').css('color', 'rgb(' + Colors.secondary + ')');
+        $('a').css('color', Colors.secondary);
       }
     }
     $('.top-nav .steam-user-name').text(steamUser);

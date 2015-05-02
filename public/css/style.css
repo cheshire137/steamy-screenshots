@@ -48,6 +48,11 @@ body > .container {
   margin-right: 1em;
 }
 
+.metadata .colourlovers-link {
+  display: inline-block;
+  margin-left: 1em;
+}
+
 .top-nav .copied-message {
   position: absolute;
   top: 0;
@@ -72,7 +77,7 @@ body > .container {
   height: 1.4rem;
   vertical-align: middle;
   border-radius: 2px;
-  border: 1px solid #fefefe;
+  border: 1px solid rgba(255,255,255,0.3);
   margin-right: 0.3em;
   -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16),0 2px 10px 0 rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
