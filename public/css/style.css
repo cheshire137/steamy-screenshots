@@ -22,6 +22,12 @@ body > .container {
   display: inline-block;
 }
 
+.pagination li {
+  font-size: 0.9rem;
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
 .pagination li a {
   display: block;
 }
