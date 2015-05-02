@@ -249,11 +249,11 @@ function setColorsFromImage(activeLi) {
     $('body').css('background-color', Colors.background).
               css('color', Colors.accent).
               attr('data-secondary', secondary);
-    $('.top-nav, input, #steam-friends-dropdown').
-        css('background-color', Colors.primary);
-    $('.page-title, .top-nav, input, nav .input-field label.active i').
-        css('color', Colors.background);
+    $('.top-nav, #steam-friends-dropdown').
+        css('background-color', Colors.secondary);
+    $('.page-title, .top-nav').css('color', Colors.background);
     $('a').css('color', Colors.secondary);
+    $('.top-nav a, #steam-friends-dropdown a').css('color', Colors.primary);
     if (typeof activeLi === 'undefined') {
       activeLi = $('li.active');
     }
@@ -272,7 +272,7 @@ function getImageHeight() {
   var cardActionHeight = 63;
   var steamLinkHeight = 22;
   var titleHeight = 27;
-  var topPadding = 80;
+  var topPadding = 40;
   var imageHeight = viewportHeight - topOffset - imageListHeight -
                     cardActionHeight - steamLinkHeight - titleHeight -
                     topPadding;
@@ -369,8 +369,8 @@ function fetchSteamFriends(steamUser) {
     }
     if (friends.length > 0) {
       $('.steam-user-nav').fadeIn('fast');
-      if (Colors.secondary) {
-        $('a').css('color', Colors.secondary);
+      if (Colors.primary) {
+        friendsList.find('a').css('color', Colors.primary);
       }
     }
     $('.top-nav .steam-user-name').text(steamUser);
