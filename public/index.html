@@ -8,27 +8,29 @@
 </head>
 <body data-steam-user="">
   <header>
+    <ul id="steam-friends-dropdown" class="dropdown-content"></ul>
     <nav class="top-nav">
       <div class="container">
         <div class="nav-wrapper">
           <a href="/" class="page-title">Steamy Screenshots</a>
+          <span class="steam-user-name"></span>
           <div class="copied-message" style="display: none">
             Copied to clipboard!
           </div>
-          <form class="right steam-user-lookup-form" id="secondary-steam-user-lookup-form" style="display: none">
-            <div class="input-field">
-              <label for="steam-user-name2">
-                <i class="fa fa-steam"></i>
-              </label>
-              <input type="text" placeholder="Steam user name" id="steam-user-name2" class="steam-user-name">
-            </div>
-          </form>
+          <ul class="right steam-user-nav" style="display: none">
+            <li>
+              <a class="dropdown-button" href="#!" data-activates="steam-friends-dropdown">Steam Friends<i class="mdi-navigation-arrow-drop-down right"></i></a>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>
   </header>
   <div class="container">
     <div class="error-message red card-panel darken-3 white-text" style="display: none"></div>
+    <div class="card-panel no-screenshots" style="display: none">
+      This Steam user has no public screenshots.
+    </div>
     <div class="loading-message card-panel loading-steam-user" style="display: none">
       <i class="fa fa-spinner fa-spin"></i>
       Loading Steam user...

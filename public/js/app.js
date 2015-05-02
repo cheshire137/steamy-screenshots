@@ -286,8 +286,13 @@ function listImages(page) {
   var steamScreenshot = $('.steam-screenshot');
   var steamLink = $('.steam-link');
   var screenshotTitle = $('.steam-screenshot-title');
+  var screenshotEntries = RSS.find('entry');
+  if (screenshotEntries.length < 1) {
+    $('.no-screenshots').show();
+    return;
+  }
   $('.extracting-colors').show();
-  RSS.find('entry').each(function() {
+  screenshotEntries.each(function() {
     var entry = $(this);
     var imageUrl = entry.find('summary').text();
     var steamUrl = entry.find('link').attr('href');
@@ -314,18 +319,42 @@ function listImages(page) {
   }
 }
 function resetUser() {
+  $('.no-screenshots').hide();
+  $('#steam-friends-dropdown').empty();
   $('.screenshot-wrapper').fadeOut('fast');
   $('.pagination').empty().fadeOut('fast');
   $('body, a, .page-title, .top-nav, nav .input-field label.active i, ' +
     'input, .metadata .swatch').removeAttr('style');
-  $('#secondary-steam-user-lookup-form').fadeOut('fast').
-                                         find('.steam-user-name').val('');
+  $('.steam-user-nav').fadeOut('fast');
+  $('.top-nav .steam-user-name').text('');
+}
+function fetchSteamFriends(steamUser) {
+  var url = '/steam_friends.json?user=' + encodeURIComponent(steamUser);
+  $.getJSON(url, function(friends) {
+    var friendsList = $('#steam-friends-dropdown');
+    for (var i=0; i<friends.length; i++) {
+      var friend = friends[i];
+      var li = $('<li>');
+      var link = $('<a>');
+      link.attr('href', '#' + friend.steamId);
+      link.text(friend.name);
+      li.append(link);
+      friendsList.append(li);
+    }
+    if (friends.length > 0) {
+      $('.steam-user-nav').fadeIn('fast');
+    }
+    $('.top-nav .steam-user-name').text(steamUser);
+  }).error(function() {
+    console.error('failed to fetch Steam friends for', steamUser);
+    $('.steam-user-nav').fadeOut('fast');
+    $('.top-nav .steam-user-name').text('');
+  });
 }
 function fetchSteamUser(steamUser, page) {
   $('#main-steam-user-lookup-form').fadeOut('fast');
   resetUser();
-  $('#secondary-steam-user-lookup-form').fadeIn('fast').
-                                         find('.steam-user-name').val(steamUser);
+  fetchSteamFriends(steamUser);
   var currentSteamUser = $('body').attr('data-steam-user');
   if (currentSteamUser === steamUser) {
     listImages(page);
@@ -404,6 +433,13 @@ $(function() {
       hash += '/page/' + page;
     }
     window.location.hash = hash;
+  });
+
+  $('body').on('click', '#steam-friends-dropdown a', function(event) {
+    event.preventDefault();
+    var link = $(this);
+    var steamUser = link.text();
+    window.location.hash = 'steam/' + steamUser;
   });
 
   $(window).on('resize', setImageHeight).

@@ -19,6 +19,14 @@ body > .container {
   display: block;
 }
 
+#steam-friends-dropdown.active {
+  z-index: 2;
+}
+
+#steam-friends-dropdown.dropdown-content li > a {
+  font-size: 1rem;
+}
+
 .steam-screenshot-title {
   font-size: 1.64rem;
   line-height: 1.804rem;
@@ -37,6 +45,14 @@ body > .container {
   width: 10em;
   text-align: center;
   margin-left: -5em;
+}
+
+.top-nav .steam-user-name {
+  font-weight: 700;
+}
+
+.top-nav .steam-user-name:before {
+  content: "\00bb\00a0";
 }
 
 .metadata .swatch {

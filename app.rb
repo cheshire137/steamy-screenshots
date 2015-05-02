@@ -24,5 +24,7 @@ get '/steam_friends.json' do
   steam_user_name = params[:user]
   steam_id = SteamApi.get_steam_id(steam_user_name)
   friends = SteamApi.get_friends(steam_id)
-  friends.map(&:to_hash).to_json
+  friends.sort {|a, b|
+    a.to_s.downcase <=> b.to_s.downcase
+  }.map(&:to_hash).to_json
 end

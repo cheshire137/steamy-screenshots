@@ -32,7 +32,11 @@ class SteamApi
   def self.get_friends steam_id
     url = "#{API_URL}/ISteamUser/GetFriendList/v0001/" +
           "?key=#{ENV['STEAM_API_KEY']}&steamid=#{steam_id}&relationship=friend"
-    json = JSON.parse(open(url).read)
+    begin
+      json = JSON.parse(open(url).read)
+    rescue OpenURI::HTTPError
+      return []
+    end
     friend_steam_ids = json['friendslist']['friends'].map {|data|
       data['steamid']
     }
