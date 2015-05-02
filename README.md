@@ -4,11 +4,11 @@ Uses a port of [Panic's iTunes album art color algorithm](http://www.panic.com/b
 
 ## How to Run
 
-    cp config.json.sample public/config.json
+    cp env.sh.sample env.sh
 
-Edit public/config.json to specify the URL to where your
+Edit env.sh to specify the URL to where your
 [Steam screenshots RSS feed app](https://github.com/moneypenny/steam-screenshots-rss)
-is hosted.
+is hosted, as well as your [Steam web API key](http://steamcommunity.com/dev).
 
     bundle
     rackup
