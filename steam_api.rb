@@ -1,11 +1,13 @@
 require 'open-uri'
 require 'json'
+require 'uri'
 
 class SteamApi
   API_URL = 'http://api.steampowered.com'.freeze
 
   # See https://wiki.teamfortress.com/wiki/WebAPI/ResolveVanityURL
   def self.get_steam_id user_name
+    user_name = URI.encode_www_form_component(user_name)
     url = "#{API_URL}/ISteamUser/ResolveVanityURL/v0001/" +
           "?key=#{ENV['STEAM_API_KEY']}&vanityurl=#{user_name}"
     json = JSON.parse(open(url).read)
