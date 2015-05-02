@@ -11,7 +11,9 @@ body > .container {
 }
 
 .screenshot-wrapper a.card {
-  display: block;
+  display: inline-block;
+  border-radius: 0;
+  line-height: 1;
   background-color: transparent;
 }
 

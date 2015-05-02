@@ -233,12 +233,21 @@ function setSwatchColors() {
   accentSwatch.css('background-color', Colors.accent).
                attr('data-tooltip', Colors.accent);
   setupCopyTooltip(accentSwatch);
+  var tertiarySwatch = $('.tertiary-swatch');
+  tertiarySwatch.css('background-color', Colors.tertiary).
+               attr('data-tooltip', Colors.tertiary);
+  setupCopyTooltip(tertiarySwatch);
 }
-function translateColors(background, primary, secondary, accent) {
-  Colors.background = tinycolor('rgb(' + background + ')').toHexString();
-  Colors.primary = tinycolor('rgb(' + primary + ')').toHexString();
-  Colors.secondary = tinycolor('rgb(' + secondary + ')').toHexString();
-  Colors.accent = tinycolor('rgb(' + accent + ')').toHexString();
+function translateColors(backgroundRGB, primaryRGB, secondaryRGB, accentRGB) {
+  var background = tinycolor('rgb(' + backgroundRGB + ')');
+  var primary = tinycolor('rgb(' + primaryRGB + ')');
+  var secondary = tinycolor('rgb(' + secondaryRGB + ')');
+  var accent = tinycolor('rgb(' + accentRGB + ')');
+  Colors.background = background.toHexString();
+  Colors.primary = primary.toHexString();
+  Colors.secondary = secondary.toHexString();
+  Colors.accent = accent.toHexString();
+  Colors.tertiary = primary.monochromatic()[1].toHexString();
 }
 function setColorsFromImage(activeLi) {
   var originalUrl = $('.steam-screenshot').attr('src');
@@ -272,7 +281,7 @@ function getImageHeight() {
   var cardActionHeight = 63;
   var steamLinkHeight = 22;
   var titleHeight = 27;
-  var topPadding = 40;
+  var topPadding = 50;
   var imageHeight = viewportHeight - topOffset - imageListHeight -
                     cardActionHeight - steamLinkHeight - titleHeight -
                     topPadding;
