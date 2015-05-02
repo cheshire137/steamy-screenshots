@@ -1,5 +1,6 @@
 var SteamyConfig = {};
 var RSS = {};
+var Colors = {};
 var ImageAnalyzer = function(image, callback) {
   var bgcolor, detailColor, findEdgeColor, findTextColors, init, isBlackOrWhite, isContrastingColor, isDarkColor, isDistinct, primaryColor, secondaryColor;
   bgcolor = primaryColor = secondaryColor = detailColor = null;
@@ -204,15 +205,38 @@ function setupCopyTooltip(el) {
     });
   });
 }
+function setSwatchColors() {
+  var bgSwatch = $('.background-swatch');
+  bgSwatch.css('background-color', 'rgb(' + Colors.background + ')').
+           attr('data-tooltip', 'rgb(' + Colors.background + ')');
+  setupCopyTooltip(bgSwatch);
+  var secondarySwatch = $('.secondary-swatch');
+  secondarySwatch.css('background-color', 'rgb(' + Colors.secondary + ')').
+                  attr('data-tooltip', 'rgb(' + Colors.secondary + ')');
+  setupCopyTooltip(secondarySwatch);
+  var primarySwatch = $('.primary-swatch');
+  primarySwatch.css('background-color', 'rgb(' + Colors.primary + ')').
+                attr('data-tooltip', 'rgb(' + Colors.primary + ')');
+  setupCopyTooltip(primarySwatch);
+  var accentSwatch = $('.accent-swatch');
+  accentSwatch.css('background-color', 'rgb(' + Colors.accent + ')').
+               attr('data-tooltip', 'rgb(' + Colors.accent + ')');
+  setupCopyTooltip(accentSwatch);
+}
 function setColorsFromImage(activeLi) {
   var originalUrl = $('.steam-screenshot').attr('src');
   var url = '/image?url=' + encodeURIComponent(originalUrl);
   var imageList = $('.pagination');
   ImageAnalyzer(url, function(background, primary, secondary, accent) {
+    Colors.background = background;
+    Colors.primary = primary;
+    Colors.secondary = secondary;
+    Colors.accent = accent;
     $('body').css('background-color', 'rgb(' + background + ')').
               css('color', 'rgb(' + accent + ')').
               attr('data-secondary', secondary);
-    $('.top-nav, input').css('background-color', 'rgb(' + primary + ')');
+    $('.top-nav, input, #steam-friends-dropdown').
+        css('background-color', 'rgb(' + primary + ')');
     $('.page-title, .top-nav, input, nav .input-field label.active i').
         css('color', 'rgb(' + background + ')');
     $('a').css('color', 'rgb(' + secondary + ')');
@@ -224,22 +248,7 @@ function setColorsFromImage(activeLi) {
     activeLi.addClass('active');
     $('.screenshot-wrapper').fadeIn('fast');
     $('.extracting-colors').hide();
-    var bgSwatch = $('.background-swatch');
-    bgSwatch.css('background-color', 'rgb(' + background + ')').
-             attr('data-tooltip', 'rgb(' + background + ')');
-    setupCopyTooltip(bgSwatch);
-    var secondarySwatch = $('.secondary-swatch');
-    secondarySwatch.css('background-color', 'rgb(' + secondary + ')').
-                    attr('data-tooltip', 'rgb(' + secondary + ')');
-    setupCopyTooltip(secondarySwatch);
-    var primarySwatch = $('.primary-swatch');
-    primarySwatch.css('background-color', 'rgb(' + primary + ')').
-                  attr('data-tooltip', 'rgb(' + primary + ')');
-    setupCopyTooltip(primarySwatch);
-    var accentSwatch = $('.accent-swatch');
-    accentSwatch.css('background-color', 'rgb(' + accent + ')').
-                 attr('data-tooltip', 'rgb(' + accent + ')');
-    setupCopyTooltip(accentSwatch);
+    setSwatchColors();
   });
 }
 function getImageHeight() {
@@ -324,7 +333,7 @@ function resetUser() {
   $('.screenshot-wrapper').fadeOut('fast');
   $('.pagination').empty().fadeOut('fast');
   $('body, a, .page-title, .top-nav, nav .input-field label.active i, ' +
-    'input, .metadata .swatch').removeAttr('style');
+    'input, .metadata .swatch, #steam-friends-dropdown').removeAttr('style');
   $('.steam-user-nav').fadeOut('fast');
   $('.top-nav .steam-user-name').text('');
 }
@@ -343,6 +352,9 @@ function fetchSteamFriends(steamUser) {
     }
     if (friends.length > 0) {
       $('.steam-user-nav').fadeIn('fast');
+      if (Colors.secondary) {
+        $('a').css('color', 'rgb(' + Colors.secondary + ')');
+      }
     }
     $('.top-nav .steam-user-name').text(steamUser);
   }).error(function() {
@@ -360,6 +372,7 @@ function fetchSteamUser(steamUser, page) {
     listImages(page);
   } else {
     RSS = {};
+    Colors = {};
     var rssServiceUrl = SteamyConfig.rssServiceUrl;
     var feedUrl = rssServiceUrl + '?user=' + encodeURIComponent(steamUser);
     var loadingMessage = $('.loading-steam-user');

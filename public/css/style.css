@@ -27,6 +27,11 @@ body > .container {
   font-size: 1rem;
 }
 
+#steam-friends-dropdown.dropdown-content li:hover,
+#steam-friends-dropdown.dropdown-content li.active {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
 .steam-screenshot-title {
   font-size: 1.64rem;
   line-height: 1.804rem;
