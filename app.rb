@@ -1,5 +1,7 @@
 require 'open-uri'
 require 'json'
+require_relative 'steam_user'
+require_relative 'steam_api'
 
 get '/' do
   File.read('public/index.html')
@@ -15,4 +17,9 @@ end
 get '/config.json' do
   content_type 'application/json'
   {rssServiceUrl: ENV['RSS_SERVICE_URL']}.to_json
+end
+
+get '/steam_friends.json' do
+  steam_user_name = params[:user]
+  steam_id = SteamApi.get_steam_id(steam_user_name)
 end
