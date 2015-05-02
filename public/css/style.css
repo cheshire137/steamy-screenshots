@@ -10,6 +10,11 @@ body > .container {
   margin: 0 auto;
 }
 
+.screenshot-wrapper a.card {
+  display: block;
+  background-color: transparent;
+}
+
 .steam-screenshot {
   max-width: 100%;
   display: inline-block;

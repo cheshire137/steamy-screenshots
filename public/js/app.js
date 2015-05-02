@@ -281,7 +281,9 @@ function loadImageFromLink(link) {
   var steamUrl = link.attr('data-steam-url');
   var title = link.attr('data-title');
   var imageUrl = link.attr('href');
-  $('.steam-screenshot').attr('src', imageUrl).load(setImageHeight);
+  var img = $('.steam-screenshot');
+  img.attr('src', imageUrl).load(setImageHeight);
+  img.closest('a').attr('href', imageUrl);
   $('.steam-link').attr('href', steamUrl);
   $('.steam-screenshot-title').text(title);
   setColorsFromImage(link.closest('li'));
@@ -310,6 +312,7 @@ function listImages(page) {
     li.addClass('waves-effect');
     if (pageIndex === page) {
       steamScreenshot.attr('src', imageUrl).load(setImageHeight);
+      steamScreenshot.closest('a').attr('href', imageUrl);
       steamLink.attr('href', steamUrl);
       screenshotTitle.text(title);
       setColorsFromImage(li);
