@@ -24,6 +24,7 @@ After pushing to Heroku, you need to set some environment variables:
 
     heroku config:set RSS_SERVICE_URL=http://url-to-steam-screenshot-rss.com
     heroku config:set STEAM_API_KEY=your_steam_web_api_key
+    heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git
 
 ## Thanks
 
