@@ -60,11 +60,13 @@ body > .container {
   margin-left: -5em;
 }
 
-.top-nav .steam-user-name {
+.top-nav .steam-user-name,
+.top-nav .steam-app-name {
   font-weight: 700;
 }
 
-.top-nav .steam-user-name:before {
+.top-nav .steam-user-name:before,
+.top-nav .steam-app-name:before {
   content: "\00bb\00a0";
 }
 

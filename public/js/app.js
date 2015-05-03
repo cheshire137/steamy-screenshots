@@ -330,15 +330,35 @@ function getSteamAppDetails(screenshotDetailsUrl) {
     steamAppLinkWrapper.hide();
   });
 }
-function listImages(page) {
+function listImage(steamUrl, imageUrl, title, pageIndex, page) {
+  var imageList = $('.pagination');
+  var steamScreenshot = $('.steam-screenshot');
+  var steamLink = $('.steam-link');
+  var screenshotTitle = $('.steam-screenshot-title');
+  var li = $('<li>');
+  li.addClass('waves-effect');
+  if (pageIndex === page) {
+    getSteamAppDetails(steamUrl);
+    steamScreenshot.attr('src', imageUrl).load(setImageHeight);
+    steamScreenshot.closest('a').attr('href', imageUrl);
+    steamLink.attr('href', steamUrl);
+    screenshotTitle.text(title);
+    setColorsFromImage(li);
+  }
+  var link = $('<a>');
+  link.attr('href', imageUrl).
+       attr('data-steam-url', steamUrl).
+       attr('data-title', title).
+       text(pageIndex);
+  li.append(link);
+  imageList.append(li);
+}
+function listImagesFromRSS(page) {
   var imageList = $('.pagination');
   var pageIndex = 1;
   if (typeof page === 'undefined') {
     page = 1;
   }
-  var steamScreenshot = $('.steam-screenshot');
-  var steamLink = $('.steam-link');
-  var screenshotTitle = $('.steam-screenshot-title');
   var screenshotEntries = RSS.find('entry');
   if (screenshotEntries.length < 1) {
     $('.no-screenshots').show();
@@ -350,24 +370,8 @@ function listImages(page) {
     var imageUrl = entry.find('summary').text();
     var steamUrl = entry.find('link').attr('href');
     var title = entry.find('title').text();
-    var li = $('<li>');
-    li.addClass('waves-effect');
-    if (pageIndex === page) {
-      getSteamAppDetails(steamUrl);
-      steamScreenshot.attr('src', imageUrl).load(setImageHeight);
-      steamScreenshot.closest('a').attr('href', imageUrl);
-      steamLink.attr('href', steamUrl);
-      screenshotTitle.text(title);
-      setColorsFromImage(li);
-    }
-    var link = $('<a>');
-    link.attr('href', imageUrl).
-         attr('data-steam-url', steamUrl).
-         attr('data-title', title).
-         text(pageIndex);
-    li.append(link);
+    listImage(steamUrl, imageUrl, title, pageIndex, page);
     pageIndex++;
-    imageList.append(li);
   });
   if (imageList.find('li').length > 1) {
     imageList.fadeIn('fast');
@@ -381,7 +385,8 @@ function resetUser() {
   $('body, a, .page-title, .top-nav, nav .input-field label.active i, ' +
     'input, .metadata .swatch, #steam-friends-dropdown').removeAttr('style');
   $('.steam-user-nav').fadeOut('fast');
-  $('.top-nav .steam-user-name').text('');
+  $('.top-nav .steam-user-name, ' +
+    '.top-nav .steam-app-name').fadeOut('fast').text('');
   $('.steam-app-wrapper').fadeOut('fast');
   $('.steam-app-link').attr('href', '');
   $('.steam-app-name').text('');
@@ -407,11 +412,11 @@ function fetchSteamFriends(steamUser) {
         friendsList.find('a').css('color', Colors.primary);
       }
     }
-    $('.top-nav .steam-user-name').text(steamUser);
+    $('.top-nav .steam-user-name').fadeIn('fast').text(steamUser);
   }).error(function() {
     console.error('failed to fetch Steam friends for', steamUser);
     $('.steam-user-nav').fadeOut('fast');
-    $('.top-nav .steam-user-name').text('');
+    $('.top-nav .steam-user-name').fadeOut('fast').text('');
   });
 }
 function setSteamUserProfileLink(steamUser) {
@@ -425,7 +430,7 @@ function fetchSteamApp(steamAppId, page) {
   RSS = {};
   var currentSteamApp = $('body').attr('data-steam-app');
   if (currentSteamApp === steamAppId) {
-    listImages(page);
+    listImagesFromRSS(page);
   } else {
     Colors = {};
     var jsonUrl = SteamyConfig.rssServiceUrl +
@@ -435,6 +440,8 @@ function fetchSteamApp(steamAppId, page) {
     $.getJSON(jsonUrl, function(screenshots) {
       console.log(screenshots);
       $('body').attr('data-steam-app', steamAppId);
+      $('.top-nav .steam-app-name').fadeIn('fast').
+                                    text(SteamAppData[steamAppId]);
     }).error(function() {
       console.error('failed to load Steam app screenshots');
       loadingMessage.hide();
@@ -449,7 +456,7 @@ function fetchSteamUser(steamUser, page) {
   setSteamUserProfileLink(steamUser);
   var currentSteamUser = $('body').attr('data-steam-user');
   if (currentSteamUser === steamUser) {
-    listImages(page);
+    listImagesFromRSS(page);
   } else {
     RSS = {};
     Colors = {};
@@ -460,7 +467,7 @@ function fetchSteamUser(steamUser, page) {
     $.get(feedUrl, function(rss) {
       loadingMessage.hide();
       RSS = $(rss);
-      listImages(page);
+      listImagesFromRSS(page);
       $('body').attr('data-steam-user', steamUser);
     });
   }
