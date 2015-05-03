@@ -589,7 +589,6 @@ $(function() {
 
   var appData = $.getJSON('/steam_apps.json');
   appData.then(function(apps) {
-    console.log('got', apps.length, 'Steam apps');
     for (var i=0; i<apps.length; i++) {
       SteamAppData[apps[i].appid] = apps[i].name;
     }
@@ -598,7 +597,6 @@ $(function() {
   var indexDump = $.getJSON('/steam_apps_index.json');
   indexDump.then(function(indexData) {
     appData.then(function() {
-      console.log('initializing search index');
       SteamAppIndex = lunr.Index.load(indexData);
       parseLocation();
     });
@@ -607,9 +605,8 @@ $(function() {
   $(window).on('resize', setImageHeight).
             on('hashchange', parseLocation);
 
-  $('.steam-app-lookup-form').on('submit', function(event) {
-    event.preventDefault();
-    var form = $(this);
+  var searchForSteamApp = function() {
+    var form = $('#main-steam-app-lookup-form');
     var searchContainer = $('#search-container');
     var resultsList = $('.app-search-results');
     var appQuery = $.trim(form.find('.steam-app-name').val());
@@ -639,6 +636,19 @@ $(function() {
         searchContainer.fadeIn('fast');
       });
     });
+  };
+
+  var searchTimer;
+  $('.steam-app-lookup-form .steam-app-name').on('keyup', function() {
+    if (searchTimer) {
+      clearTimeout(searchTimer);
+    }
+    searchTimer = setTimeout(searchForSteamApp, 1000);
+  });
+
+  $('.steam-app-lookup-form').on('submit', function(event) {
+    event.preventDefault();
+    searchForSteamApp();
   });
 
   $('.steam-user-lookup-form').on('submit', function(event) {
