@@ -1,2 +1,4 @@
 env.sh
 steam-apps.json
+steam-apps-index.json
+node_modules/

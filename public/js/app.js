@@ -1,6 +1,10 @@
 var SteamyConfig = {};
 var RSS = {};
 var Colors = {};
+var SteamAppIndex = lunr(function() {
+  this.field('name');
+  this.ref('id');
+});
 var ImageAnalyzer = function(image, callback) {
   var bgcolor, detailColor, findEdgeColor, findTextColors, init, isBlackOrWhite, isContrastingColor, isDarkColor, isDistinct, primaryColor, secondaryColor;
   bgcolor = primaryColor = secondaryColor = detailColor = null;
@@ -484,6 +488,15 @@ function parseLocation() {
     }
   }
 }
+function initializeAppIndex(apps) {
+  console.log(apps.length);
+  for (var i=0; i<apps.length; i++) {
+    SteamAppIndex.add({
+      id: apps[i].appid,
+      name: apps[i].name
+    });
+  }
+}
 $(function() {
   $.getJSON('/config.json', function(config) {
     SteamyConfig = config;
@@ -510,8 +523,45 @@ $(function() {
     window.location.hash = 'steam/' + steamUser;
   });
 
+  var appData = $.getJSON('/steam_apps.json');
+  appData.then(initializeAppIndex);
+
   $(window).on('resize', setImageHeight).
             on('hashchange', parseLocation);
+
+  $('.steam-app-lookup-form').on('submit', function(event) {
+    event.preventDefault();
+    var form = $(this);
+    var searchContainer = $('#search-container');
+    var resultsList = $('.app-search-results');
+    var appQuery = $.trim(form.find('.steam-app-name').val());
+    if (appQuery === '') {
+      resultsList.empty();
+      searchContainer.fadeOut('fast');
+      return;
+    }
+    console.log(appQuery);
+    var results = SteamAppIndex.search(appQuery);
+    appData.then(function(apps) {
+      resultsList.empty();
+      if (results.length > 0) {
+        resultsList.append(results.map(function(result) {
+          var li = $('<li>');
+          var link = $('<a>');
+          link.attr('href', '#steam/app/' + result.ref);
+          console.log(result);
+          link.text(SteamAppIndex.documentStore.Store[result.ref].name);
+          li.append(link);
+          return li;
+        }));
+      } else {
+        var li = $('<li>');
+        li.text('No matching games found');
+        resultsList.append(li);
+      }
+      searchContainer.fadeIn('fast');
+    });
+  });
 
   $('.steam-user-lookup-form').on('submit', function(event) {
     event.preventDefault();

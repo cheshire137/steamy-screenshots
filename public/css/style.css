@@ -109,6 +109,10 @@ form p + .input-field {
   width: 9em;
 }
 
+#search-container {
+  display: none;
+}
+
 .clearfix:after {
   visibility: hidden;
   display: block;
