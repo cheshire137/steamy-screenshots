@@ -287,13 +287,14 @@ function getImageHeight() {
   var topOffset = $('header').height();
   var viewportHeight = $(window).height();
   var imageListHeight = $('.pagination').height();
+  var footerHeight = $('.page-footer').height();
   var cardActionHeight = 63;
   var steamLinkHeight = 22;
   var titleHeight = 27;
   var topPadding = 50;
   var imageHeight = viewportHeight - topOffset - imageListHeight -
                     cardActionHeight - steamLinkHeight - titleHeight -
-                    topPadding;
+                    topPadding - footerHeight;
   return imageHeight;
 }
 function setImageHeight() {
