@@ -613,6 +613,7 @@ $(function() {
   indexDump.then(function(indexData) {
     appData.then(function() {
       SteamAppIndex = lunr.Index.load(indexData);
+      $('.general-loading').hide();
       parseLocation();
     });
   });
