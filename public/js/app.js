@@ -286,15 +286,13 @@ function setColorsFromImage(activeLi) {
 function getImageHeight() {
   var topOffset = $('header').height();
   var viewportHeight = $(window).height();
-  var imageListHeight = $('.pagination').height();
   var footerHeight = $('.page-footer').height();
   var cardActionHeight = 63;
   var steamLinkHeight = 22;
   var titleHeight = 27;
   var topPadding = 50;
-  var imageHeight = viewportHeight - topOffset - imageListHeight -
-                    cardActionHeight - steamLinkHeight - titleHeight -
-                    topPadding - footerHeight;
+  var imageHeight = viewportHeight - topOffset - cardActionHeight -
+                    steamLinkHeight - titleHeight - topPadding - footerHeight;
   return imageHeight;
 }
 function setImageHeight() {
@@ -395,7 +393,8 @@ function listImagesFromRSS(page) {
 function resetUser() {
   $('.no-screenshots').hide();
   $('#steam-friends-dropdown').empty();
-  $('.screenshot-wrapper, .error-message').fadeOut('fast');
+  $('.screenshot-wrapper, .error-message, ' +
+    '.steam-user-screenshots-link').fadeOut('fast');
   $('.pagination').empty().fadeOut('fast');
   $('body, a, .page-title, .top-nav, nav .input-field label.active i, ' +
     'input, .metadata .swatch, #steam-friends-dropdown, .page-footer').
@@ -405,7 +404,7 @@ function resetUser() {
     '.top-nav .steam-app-name').fadeOut('fast').text('');
   $('.steam-app-wrapper').fadeOut('fast');
   $('.steam-app-link').attr('href', '');
-  $('.steam-app-name').text('');
+  $('.steam-app-name, .steam-user-screenshots-link .steam-user-name').text('');
   $('.steam-user-profile-link').attr('href', '').fadeOut('fast');
   $('#search-container').fadeOut('fast');
 }
@@ -447,9 +446,18 @@ function listImagesFromAppScreenshots(page) {
   $('.extracting-colors').show();
   for (var i=0; i<SteamAppScreenshots.length; i++) {
     var screenshot = SteamAppScreenshots[i];
-    if (screenshot.userUrl && screenshot.userUrl !== '') {
-      $('.steam-user-profile-link').attr('href', screenshot.userUrl).
-                                    fadeIn('fast');
+    if (i + 1 === page) {
+      if (screenshot.userUrl && screenshot.userUrl !== '') {
+        $('.steam-user-profile-link').attr('href', screenshot.userUrl).
+                                      fadeIn('fast');
+      }
+      // TODO: check if user has public screenshots before linking
+      // if (screenshot.userName && screenshot.userName !== '') {
+      //   $('.steam-user-screenshots-link .steam-user-name').
+      //       text(screenshot.userName);
+      //   var path = '#steam/user/' + screenshot.userName;
+      //   $('.steam-user-screenshots-link').fadeIn('fast').attr('href', path);
+      // }
     }
     var url = screenshot.fullSizeUrl || screenshot.mediumUrl;
     listImage(screenshot.detailsUrl, url, screenshot.title, i + 1, page);
