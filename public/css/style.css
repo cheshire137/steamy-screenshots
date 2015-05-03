@@ -76,6 +76,12 @@ body > .container {
   margin-top: 1em;
 }
 
+.metadata a i {
+  display: inline-block;
+  width: 21px;
+  text-align: center;
+}
+
 .metadata .swatch {
   display: inline-block;
   cursor: pointer;

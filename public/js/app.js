@@ -383,6 +383,7 @@ function resetUser() {
   $('.steam-app-wrapper').fadeOut('fast');
   $('.steam-app-link').attr('href', '');
   $('.steam-app-name').text('');
+  $('.steam-user-profile-link').attr('href', '').fadeOut('fast');
 }
 function fetchSteamFriends(steamUser) {
   var url = '/steam_friends.json?user=' + encodeURIComponent(steamUser);
@@ -410,10 +411,15 @@ function fetchSteamFriends(steamUser) {
     $('.top-nav .steam-user-name').text('');
   });
 }
+function setSteamUserProfileLink(steamUser) {
+  var url = 'http://steamcommunity.com/id/' + steamUser;
+  $('.steam-user-profile-link').attr('href', url).fadeIn('fast');
+}
 function fetchSteamUser(steamUser, page) {
   $('#main-steam-user-lookup-form').fadeOut('fast');
   resetUser();
   fetchSteamFriends(steamUser);
+  setSteamUserProfileLink(steamUser);
   var currentSteamUser = $('body').attr('data-steam-user');
   if (currentSteamUser === steamUser) {
     listImages(page);
