@@ -262,7 +262,7 @@ function setColorsFromImage(activeLi) {
         css('background-color', Colors.secondary);
     $('.page-title, .top-nav').css('color', Colors.background);
     $('a').css('color', Colors.secondary);
-    $('.top-nav a, #steam-friends-dropdown a').css('color', Colors.primary);
+    $('.top-nav a, #steam-friends-dropdown a').css('color', Colors.tertiary);
     if (typeof activeLi === 'undefined') {
       activeLi = $('li.active');
     }
