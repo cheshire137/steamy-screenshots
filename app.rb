@@ -28,3 +28,8 @@ get '/steam_friends.json' do
     a.to_s.downcase <=> b.to_s.downcase
   }.map(&:to_hash).to_json
 end
+
+get '/steam_apps.json' do
+  content_type 'application/json'
+  SteamApi.get_steam_apps.to_json
+end
