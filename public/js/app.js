@@ -417,6 +417,7 @@ function setSteamUserProfileLink(steamUser) {
 }
 function fetchSteamUser(steamUser, page) {
   $('#main-steam-user-lookup-form').fadeOut('fast');
+  $('#main-steam-app-lookup-form').fadeOut('fast');
   resetUser();
   fetchSteamFriends(steamUser);
   setSteamUserProfileLink(steamUser);
@@ -442,6 +443,7 @@ function showSteamForm() {
   resetUser();
   $('#main-steam-user-lookup-form').fadeIn('fast');
   $('#steam-user-name').focus();
+  $('#main-steam-app-lookup-form').fadeIn('fast');
 }
 function extractUrlBit(routePrefix) {
   var hash = window.location.hash;

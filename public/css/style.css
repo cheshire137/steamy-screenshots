@@ -68,6 +68,14 @@ body > .container {
   content: "\00bb\00a0";
 }
 
+#main-steam-user-lookup-form {
+  margin-bottom: 40px;
+}
+
+form p + .input-field {
+  margin-top: 2rem;
+}
+
 .metadata {
   text-align: left;
 }

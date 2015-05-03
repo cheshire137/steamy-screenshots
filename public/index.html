@@ -39,20 +39,30 @@
       <i class="fa fa-spinner fa-spin"></i>
       Extracting colors...
     </div>
-    <form class="col s12 steam-user-lookup-form" id="main-steam-user-lookup-form" style="display: none">
-      <div class="row">
-        <div class="input-field col s8">
-          <i class="fa fa-steam prefix"></i>
-          <input type="text" id="steam-user-name" class="steam-user-name">
-          <label for="steam-user-name">Steam user name</label>
-        </div>
-        <div class="col s4">
-          <button type="submit" class="btn-large waves-effect waves-light">
-            Find Screenshots
-          </button>
-        </div>
+    <div class="row">
+      <div class="col s8 offset-s2">
+        <form class="steam-user-lookup-form col s12" id="main-steam-user-lookup-form" style="display: none">
+          <p>
+            Find screenshots from a particular user:
+          </p>
+          <div class="input-field">
+            <i class="fa fa-user prefix"></i>
+            <input type="text" placeholder="e.g., cheshire137" id="steam-user-name" class="steam-user-name">
+            <label for="steam-user-name">Steam user name</label>
+          </div>
+        </form>
+        <form class="steam-app-lookup-form col s12" id="main-steam-app-lookup-form" style="display: none">
+          <p>
+            Or find screenshots for a game:
+          </p>
+          <div class="input-field">
+            <i class="fa fa-search prefix"></i>
+            <input type="text" placeholder="e.g., Oblivion" id="steam-app-name" class="steam-app-name">
+            <label for="steam-app-name">Steam game</label>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
     <div class="screenshot-wrapper center" style="display: none">
       <div class="row">
         <div class="col s9">
