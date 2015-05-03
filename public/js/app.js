@@ -254,8 +254,10 @@ function translateColors(backgroundRGB, primaryRGB, secondaryRGB, accentRGB) {
 }
 function setColorsFromImage(activeLi) {
   var originalUrl = $('.steam-screenshot').attr('src');
+  if (!originalUrl || $.trim(originalUrl) === '') {
+    return;
+  }
   var url = '/image?url=' + encodeURIComponent(originalUrl);
-  var imageList = $('.pagination');
   ImageAnalyzer(url, function(background, primary, secondary, accent) {
     translateColors(background, primary, secondary, accent);
     $('body').css('background-color', Colors.background).
@@ -297,6 +299,14 @@ function setImageHeight() {
   }
   img.css('max-height', getImageHeight());
 }
+function showScreenshotTitle(title) {
+  var el = $('.steam-screenshot-title');
+  if (title && $.trim(title) !== '') {
+    el.text(title);
+  } else {
+    el.text('').fadeOut('fast');
+  }
+}
 function loadImageFromLink(link) {
   $('.extracting-colors').show();
   var oldLink = $('.pagination li.active a');
@@ -311,7 +321,7 @@ function loadImageFromLink(link) {
   img.attr('src', imageUrl).load(setImageHeight);
   img.closest('a').attr('href', imageUrl);
   $('.steam-link').attr('href', steamUrl);
-  $('.steam-screenshot-title').text(title);
+  showScreenshotTitle(title);
   setColorsFromImage(link.closest('li'));
 }
 function getSteamAppDetails(screenshotDetailsUrl) {
@@ -335,7 +345,6 @@ function listImage(steamUrl, imageUrl, title, pageIndex, page) {
   var imageList = $('.pagination');
   var steamScreenshot = $('.steam-screenshot');
   var steamLink = $('.steam-link');
-  var screenshotTitle = $('.steam-screenshot-title');
   var li = $('<li>');
   li.addClass('waves-effect');
   if (pageIndex === page) {
@@ -343,7 +352,7 @@ function listImage(steamUrl, imageUrl, title, pageIndex, page) {
     steamScreenshot.attr('src', imageUrl).load(setImageHeight);
     steamScreenshot.closest('a').attr('href', imageUrl);
     steamLink.attr('href', steamUrl);
-    screenshotTitle.text(title);
+    showScreenshotTitle(title);
     setColorsFromImage(li);
   }
   var link = $('<a>');
@@ -606,12 +615,12 @@ $(function() {
             on('hashchange', parseLocation);
 
   var searchForSteamApp = function() {
-    var form = $('#main-steam-app-lookup-form');
     var searchContainer = $('#search-container');
+    var form = $('#main-steam-app-lookup-form');
     var resultsList = $('.app-search-results');
+    resultsList.empty();
     var appQuery = $.trim(form.find('.steam-app-name').val());
     if (appQuery === '') {
-      resultsList.empty();
       searchContainer.fadeOut('fast');
       return;
     }
