@@ -74,6 +74,10 @@ body > .container {
   margin-bottom: 40px;
 }
 
+#steam-app-name {
+  margin-bottom: 0;
+}
+
 form p + .input-field {
   margin-top: 2rem;
 }
@@ -111,8 +115,29 @@ form p + .input-field {
   width: 9em;
 }
 
-#search-container {
+#search-container.card-panel {
   display: none;
+  margin-left: 45px;
+  margin-top: 0;
+  padding: 0;
+}
+
+#search-container .app-search-results {
+  margin: 0;
+}
+
+#search-container .app-search-results li + li {
+  border-top: 1px solid #ddd;
+}
+
+#search-container .app-search-results li a {
+  display: block;
+  padding: 10px;
+}
+
+#search-container .app-search-results li a:hover,
+#search-container .app-search-results li a:focus {
+  background-color: #eee;
 }
 
 .clearfix:after {
