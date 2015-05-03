@@ -51,16 +51,6 @@ body > .container {
   margin: 0 0 0.656rem 0;
 }
 
-.metadata .steam-link {
-  display: inline-block;
-  margin-right: 1em;
-}
-
-.metadata .colourlovers-link {
-  display: inline-block;
-  margin-left: 1em;
-}
-
 .top-nav .copied-message {
   position: absolute;
   top: 0;
@@ -76,6 +66,14 @@ body > .container {
 
 .top-nav .steam-user-name:before {
   content: "\00bb\00a0";
+}
+
+.metadata {
+  text-align: left;
+}
+
+.metadata li + li {
+  margin-top: 1em;
 }
 
 .metadata .swatch {
@@ -97,10 +95,6 @@ body > .container {
   width: 9em;
 }
 
-label, label i {
-  cursor: pointer;
-}
-
 .clearfix:after {
   visibility: hidden;
   display: block;
@@ -118,3 +112,9 @@ label, label i {
 * html .clearfix { height: 1%; }
 .clearfix { display: block; }
 /* close commented backslash hack */
+
+@media only screen and (min-width: 993px) {
+  .container {
+    width: 90%;
+  }
+}

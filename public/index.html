@@ -54,25 +54,41 @@
       </div>
     </form>
     <div class="screenshot-wrapper center" style="display: none">
-      <h2 class="steam-screenshot-title"></h2>
-      <p class="metadata">
-        <a href="" class="steam-link" target="_blank">
-          <i class="fa fa-steam"></i>
-          View on Steam
-        </a>
-        <span class="background-swatch swatch tooltipped"></span>
-        <span class="primary-swatch swatch tooltipped"></span>
-        <span class="tertiary-swatch swatch tooltipped"></span>
-        <span class="secondary-swatch swatch tooltipped"></span>
-        <span class="accent-swatch swatch tooltipped"></span>
-        <a href="" class="colourlovers-link" target="_blank">
-          <i class="mdi-image-palette tiny"></i>
-          Create palette
-        </a>
-      </p>
-      <a class="card" href="" target="_blank">
-        <img class="steam-screenshot" src="" alt="Steam screenshot">
-      </a>
+      <div class="row">
+        <div class="col s9">
+          <h2 class="steam-screenshot-title"></h2>
+          <a class="card" href="" target="_blank">
+            <img class="steam-screenshot" src="" alt="Steam screenshot">
+          </a>
+        </div>
+        <div class="col s3">
+          <ul class="metadata">
+            <li>
+              <span class="background-swatch swatch tooltipped"></span>
+              <span class="primary-swatch swatch tooltipped"></span>
+              <span class="tertiary-swatch swatch tooltipped"></span>
+              <span class="secondary-swatch swatch tooltipped"></span>
+              <span class="accent-swatch swatch tooltipped"></span>
+            </li>
+            <li class="steam-app-wrapper" style="display: none">
+              <a href="" class="steam-app-link" target="_blank">
+                <span class="steam-app-name"></span>
+              </a>
+            </li>
+            <li>
+              <a href="" class="steam-link" target="_blank">
+                <i class="fa fa-steam"></i>
+                View screenshot on Steam
+              </a>
+            <li>
+              <a href="" class="colourlovers-link" target="_blank">
+                <i class="mdi-image-palette tiny"></i>
+                Create palette
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
     <ul class="pagination clearfix" style="display: none">
     </ul>

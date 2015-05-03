@@ -311,6 +311,23 @@ function loadImageFromLink(link) {
   $('.steam-screenshot-title').text(title);
   setColorsFromImage(link.closest('li'));
 }
+function getSteamAppDetails(screenshotDetailsUrl) {
+  var steamAppName = $('.steam-app-name');
+  var steamAppLink = $('.steam-app-link');
+  var steamAppLinkWrapper = $('.steam-app-wrapper');
+  var url = SteamyConfig.rssServiceUrl + '/app_for_screenshot.json?url=' +
+            encodeURIComponent(screenshotDetailsUrl);
+  $.getJSON(url, function(data) {
+    steamAppName.text(data.name);
+    steamAppLink.attr('href', data.url);
+    steamAppLinkWrapper.fadeIn('fast');
+  }).error(function() {
+    console.error('failed to fetch Steam app details');
+    steamAppName.text('');
+    steamAppLink.attr('href', '');
+    steamAppLinkWrapper.hide();
+  });
+}
 function listImages(page) {
   var imageList = $('.pagination');
   var pageIndex = 1;
@@ -334,6 +351,7 @@ function listImages(page) {
     var li = $('<li>');
     li.addClass('waves-effect');
     if (pageIndex === page) {
+      getSteamAppDetails(steamUrl);
       steamScreenshot.attr('src', imageUrl).load(setImageHeight);
       steamScreenshot.closest('a').attr('href', imageUrl);
       steamLink.attr('href', steamUrl);
@@ -362,6 +380,9 @@ function resetUser() {
     'input, .metadata .swatch, #steam-friends-dropdown').removeAttr('style');
   $('.steam-user-nav').fadeOut('fast');
   $('.top-nav .steam-user-name').text('');
+  $('.steam-app-wrapper').fadeOut('fast');
+  $('.steam-app-link').attr('href', '');
+  $('.steam-app-name').text('');
 }
 function fetchSteamFriends(steamUser) {
   var url = '/steam_friends.json?user=' + encodeURIComponent(steamUser);
