@@ -18,6 +18,12 @@ is hosted, as well as your [Steam web API key](http://steamcommunity.com/dev).
 
 Visit [localhost:9292](http://localhost:9292).
 
+## How to Update the List of Steam Apps
+
+    npm install
+    npm run-script update-steam-apps
+    npm run-script update-steam-apps-index
+
 ## How to Deploy to Heroku
 
 After pushing to Heroku, you need to set some environment variables:
