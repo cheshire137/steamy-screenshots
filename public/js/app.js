@@ -255,6 +255,8 @@ function translateColors(backgroundRGB, primaryRGB, secondaryRGB, accentRGB) {
 function setColorsFromImage(activeLi) {
   var originalUrl = $('.steam-screenshot').attr('src');
   if (!originalUrl || $.trim(originalUrl) === '') {
+    $('.extracting-colors').hide();
+    $('.error-message').text('Failed to load screenshot.').fadeIn('fast');
     return;
   }
   var url = '/image?url=' + encodeURIComponent(originalUrl);
@@ -390,7 +392,7 @@ function listImagesFromRSS(page) {
 function resetUser() {
   $('.no-screenshots').hide();
   $('#steam-friends-dropdown').empty();
-  $('.screenshot-wrapper').fadeOut('fast');
+  $('.screenshot-wrapper, .error-message').fadeOut('fast');
   $('.pagination').empty().fadeOut('fast');
   $('body, a, .page-title, .top-nav, nav .input-field label.active i, ' +
     'input, .metadata .swatch, #steam-friends-dropdown').removeAttr('style');
@@ -445,8 +447,8 @@ function listImagesFromAppScreenshots(page) {
       $('.steam-user-profile-link').attr('href', screenshot.userUrl).
                                     fadeIn('fast');
     }
-    listImage(screenshot.detailsUrl, screenshot.fullSizeUrl,
-              screenshot.title, i + 1, page);
+    var url = screenshot.fullSizeUrl || screenshot.mediumUrl;
+    listImage(screenshot.detailsUrl, url, screenshot.title, i + 1, page);
   }
   if (imageList.find('li').length > 1) {
     imageList.fadeIn('fast');
