@@ -420,10 +420,6 @@ function fetchSteamFriends(steamUser) {
     $('.top-nav .steam-user-name').fadeOut('fast').text('');
   });
 }
-function setSteamUserProfileLink(steamUser) {
-  var url = 'http://steamcommunity.com/id/' + steamUser;
-  $('.steam-user-profile-link').attr('href', url).fadeIn('fast');
-}
 function listImagesFromAppScreenshots(page) {
   if (SteamAppScreenshots.length < 1) {
     $('.no-screenshots').show();
@@ -436,6 +432,10 @@ function listImagesFromAppScreenshots(page) {
   $('.extracting-colors').show();
   for (var i=0; i<SteamAppScreenshots.length; i++) {
     var screenshot = SteamAppScreenshots[i];
+    if (screenshot.userUrl && screenshot.userUrl !== '') {
+      $('.steam-user-profile-link').attr('href', screenshot.userUrl).
+                                    fadeIn('fast');
+    }
     listImage(screenshot.detailsUrl, screenshot.fullSizeUrl,
               screenshot.title, i + 1, page);
   }
@@ -477,7 +477,8 @@ function fetchSteamUser(steamUser, page) {
   $('#main-steam-app-lookup-form').fadeOut('fast');
   resetUser();
   fetchSteamFriends(steamUser);
-  setSteamUserProfileLink(steamUser);
+  var url = 'http://steamcommunity.com/id/' + steamUser;
+  $('.steam-user-profile-link').attr('href', url).fadeIn('fast');
   var currentSteamUser = $('body').attr('data-steam-user');
   if (currentSteamUser === steamUser) {
     listImagesFromRSS(page);
