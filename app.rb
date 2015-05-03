@@ -47,15 +47,8 @@ end
 get '/steam_apps_index.json' do
   content_type 'application/json'
   if File.exists?(STEAM_APPS_INDEX_CACHE_FILE)
-    cur_time = Time.now
-    last_modified = File.mtime(STEAM_APPS_INDEX_CACHE_FILE)
-    seconds = (cur_time - last_modified).to_int
-    minutes = seconds / 60
-    hours = minutes / 60
-    days = hours / 60
-    write_steam_apps_index_cache if days > 1
+    File.read(STEAM_APPS_INDEX_CACHE_FILE)
   else
-    write_steam_apps_index_cache
+    {}.to_json
   end
-  File.read(STEAM_APPS_INDEX_CACHE_FILE)
 end

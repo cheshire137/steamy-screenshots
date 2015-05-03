@@ -6,29 +6,16 @@ class SteamApi
   API_URL = 'http://api.steampowered.com'.freeze
   STEAM_APPS_CACHE_FILE = 'steam-apps.json'.freeze
 
-  def self.update_steam_apps_cache apps
+  def self.update_steam_apps_cache
+    apps = fetch_steam_apps
     File.open(STEAM_APPS_CACHE_FILE, 'w') {|f| f.puts apps.to_json }
   end
 
   def self.get_steam_apps
     if File.exists?(STEAM_APPS_CACHE_FILE)
-      cur_time = Time.now
-      last_modified = File.mtime(STEAM_APPS_CACHE_FILE)
-      seconds = (cur_time - last_modified).to_int
-      minutes = seconds / 60
-      hours = minutes / 60
-      days = hours / 60
-      if days > 1
-        apps = fetch_steam_apps
-        update_steam_apps_cache apps
-        apps
-      else
-        JSON.parse(File.read(STEAM_APPS_CACHE_FILE))
-      end
+      JSON.parse(File.read(STEAM_APPS_CACHE_FILE))
     else
-      apps = fetch_steam_apps
-      update_steam_apps_cache apps
-      apps
+      []
     end
   end
 
