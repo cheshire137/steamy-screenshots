@@ -12,6 +12,7 @@ Edit env.sh to specify the URL to where your
 [Steam screenshots RSS feed app](https://github.com/moneypenny/steam-screenshots-rss)
 is hosted, as well as your [Steam web API key](http://steamcommunity.com/dev).
 
+    npm install
     bundle
     rackup
 

@@ -40,7 +40,7 @@ def write_steam_apps_index_cache
   unless File.exists?(SteamApi::STEAM_APPS_CACHE_FILE)
     SteamApi.get_steam_apps
   end
-  cmd = "node_modules/.bin/lunr-generator -r id -f name < " +
+  cmd = "node_modules/.bin/lunr-generator -r appid -f name < " +
         "#{SteamApi::STEAM_APPS_CACHE_FILE} > #{STEAM_APPS_INDEX_CACHE_FILE}"
 end
 

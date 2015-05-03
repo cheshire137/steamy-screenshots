@@ -1,10 +1,8 @@
 var SteamyConfig = {};
 var RSS = {};
 var Colors = {};
-var SteamAppIndex = lunr(function() {
-  this.field('name');
-  this.ref('id');
-});
+var SteamAppIndex = {};
+var SteamAppData = {};
 var ImageAnalyzer = function(image, callback) {
   var bgcolor, detailColor, findEdgeColor, findTextColors, init, isBlackOrWhite, isContrastingColor, isDarkColor, isDistinct, primaryColor, secondaryColor;
   bgcolor = primaryColor = secondaryColor = detailColor = null;
@@ -488,15 +486,6 @@ function parseLocation() {
     }
   }
 }
-function initializeAppIndex(apps) {
-  console.log(apps.length);
-  for (var i=0; i<apps.length; i++) {
-    SteamAppIndex.add({
-      id: apps[i].appid,
-      name: apps[i].name
-    });
-  }
-}
 $(function() {
   $.getJSON('/config.json', function(config) {
     SteamyConfig = config;
@@ -524,7 +513,18 @@ $(function() {
   });
 
   var appData = $.getJSON('/steam_apps.json');
-  appData.then(initializeAppIndex);
+  appData.then(function(apps) {
+    console.log('got', apps.length, 'Steam apps');
+    for (var i=0; i<apps.length; i++) {
+      SteamAppData[apps[i].appid] = apps[i].name;
+    }
+  });
+
+  var indexDump = $.getJSON('/steam_apps_index.json');
+  indexDump.then(function(indexData) {
+    console.log('initializing search index');
+    SteamAppIndex = lunr.Index.load(indexData);
+  });
 
   $(window).on('resize', setImageHeight).
             on('hashchange', parseLocation);
@@ -543,23 +543,25 @@ $(function() {
     console.log(appQuery);
     var results = SteamAppIndex.search(appQuery);
     appData.then(function(apps) {
-      resultsList.empty();
-      if (results.length > 0) {
-        resultsList.append(results.map(function(result) {
+      indexDump.then(function(indexData) {
+        resultsList.empty();
+        if (results.length > 0) {
+          resultsList.append(results.map(function(result) {
+            var li = $('<li>');
+            var link = $('<a>');
+            link.attr('href', '#steam/app/' + result.ref);
+            console.log(result.ref, SteamAppData[result.ref]);
+            link.text(SteamAppData[result.ref]);
+            li.append(link);
+            return li;
+          }));
+        } else {
           var li = $('<li>');
-          var link = $('<a>');
-          link.attr('href', '#steam/app/' + result.ref);
-          console.log(result);
-          link.text(SteamAppIndex.documentStore.Store[result.ref].name);
-          li.append(link);
-          return li;
-        }));
-      } else {
-        var li = $('<li>');
-        li.text('No matching games found');
-        resultsList.append(li);
-      }
-      searchContainer.fadeIn('fast');
+          li.text('No matching games found');
+          resultsList.append(li);
+        }
+        searchContainer.fadeIn('fast');
+      });
     });
   });
 
