@@ -3,6 +3,7 @@ var RSS = {};
 var Colors = {};
 var SteamAppIndex = {};
 var SteamAppData = {};
+var SteamAppScreenshots = [];
 var ImageAnalyzer = function(image, callback) {
   var bgcolor, detailColor, findEdgeColor, findTextColors, init, isBlackOrWhite, isContrastingColor, isDarkColor, isDistinct, primaryColor, secondaryColor;
   bgcolor = primaryColor = secondaryColor = detailColor = null;
@@ -423,25 +424,48 @@ function setSteamUserProfileLink(steamUser) {
   var url = 'http://steamcommunity.com/id/' + steamUser;
   $('.steam-user-profile-link').attr('href', url).fadeIn('fast');
 }
+function listImagesFromAppScreenshots(page) {
+  if (SteamAppScreenshots.length < 1) {
+    $('.no-screenshots').show();
+  }
+  var imageList = $('.pagination');
+  var steamAppId = $('body').attr('data-steam-app');
+  $('body').attr('data-steam-app', steamAppId);
+  $('.top-nav .steam-app-name').fadeIn('fast').
+                                text(SteamAppData[steamAppId]);
+  $('.extracting-colors').show();
+  for (var i=0; i<SteamAppScreenshots.length; i++) {
+    var screenshot = SteamAppScreenshots[i];
+    listImage(screenshot.detailsUrl, screenshot.fullSizeUrl,
+              screenshot.title, i + 1, page);
+  }
+  if (imageList.find('li').length > 1) {
+    imageList.fadeIn('fast');
+  }
+}
 function fetchSteamApp(steamAppId, page) {
   $('#main-steam-user-lookup-form').fadeOut('fast');
   $('#main-steam-app-lookup-form').fadeOut('fast');
+  if (typeof page === 'undefined') {
+    page = 1;
+  }
   resetUser();
   RSS = {};
   var currentSteamApp = $('body').attr('data-steam-app');
   if (currentSteamApp === steamAppId) {
-    listImagesFromRSS(page);
+    listImagesFromAppScreenshots(page);
   } else {
+    $('body').attr('data-steam-app', steamAppId);
     Colors = {};
+    SteamAppScreenshots = [];
     var jsonUrl = SteamyConfig.rssServiceUrl +
                   '/app_screenshots.json?app_id=' + steamAppId;
     var loadingMessage = $('.loading-steam-app');
     loadingMessage.show();
     $.getJSON(jsonUrl, function(screenshots) {
-      console.log(screenshots);
-      $('body').attr('data-steam-app', steamAppId);
-      $('.top-nav .steam-app-name').fadeIn('fast').
-                                    text(SteamAppData[steamAppId]);
+      SteamAppScreenshots = screenshots;
+      loadingMessage.hide();
+      listImagesFromAppScreenshots(page);
     }).error(function() {
       console.error('failed to load Steam app screenshots');
       loadingMessage.hide();
@@ -529,18 +553,26 @@ function parseLocation() {
   }
 }
 $(function() {
-  $.getJSON('/config.json', function(config) {
+  var configFetcher = $.getJSON('/config.json').
+      error(function(jqXHR, textStatus, error) {
+        $('.error-message').text('Failed to load config.json').fadeIn('fast');
+      });
+  configFetcher.then(function(config) {
     SteamyConfig = config;
-    parseLocation();
-  }).error(function(jqXHR, textStatus, error) {
-    $('.error-message').text('Failed to load config.json').fadeIn('fast');
   });
 
   $('body').on('click', '.pagination a', function(event) {
     event.preventDefault();
     var link = $(this);
-    var hash = 'steam/user/' + getSteamUserFromUrl();
     var page = parseInt($.trim(link.text()), 10);
+    var steamUser = getSteamUserFromUrl();
+    var steamAppId = getSteamAppIdFromUrl();
+    var hash = 'steam/';
+    if (steamUser !== '') {
+      hash += 'user/' + steamUser;
+    } else if (steamAppId !== '') {
+      hash += 'app/' + steamAppId;
+    }
     if (page !== 1) {
       hash += '/page/' + page;
     }
@@ -564,8 +596,11 @@ $(function() {
 
   var indexDump = $.getJSON('/steam_apps_index.json');
   indexDump.then(function(indexData) {
-    console.log('initializing search index');
-    SteamAppIndex = lunr.Index.load(indexData);
+    appData.then(function() {
+      console.log('initializing search index');
+      SteamAppIndex = lunr.Index.load(indexData);
+      parseLocation();
+    });
   });
 
   $(window).on('resize', setImageHeight).
