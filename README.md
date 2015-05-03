@@ -37,4 +37,7 @@ After pushing to Heroku, you need to set some environment variables:
 
 Thanks to [lukasklein](https://github.com/lukasklein/itunes-colors) for the
 JavaScript to extract colors from the screenshots. Thanks to
-[TinyColor](https://github.com/bgrins/TinyColor) for color parsing.
+[TinyColor](https://github.com/bgrins/TinyColor) for color parsing. Thanks to
+[lunr.js](http://lunrjs.com/) for the Steam app search. Thanks to
+[lunr-index-build](https://www.npmjs.com/package/lunr-index-build) for the tool
+used to build the lunr.js search index from the list of Steam apps.
