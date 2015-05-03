@@ -267,6 +267,8 @@ function setColorsFromImage(activeLi) {
               attr('data-secondary', secondary);
     $('.top-nav, #steam-friends-dropdown').
         css('background-color', Colors.secondary);
+    $('.page-footer').css('background-color', Colors.tertiary).
+                      css('color', Colors.background);
     $('.page-title, .top-nav').css('color', Colors.background);
     $('a').css('color', Colors.secondary);
     $('.top-nav a, #steam-friends-dropdown a').css('color', Colors.tertiary);
@@ -395,7 +397,8 @@ function resetUser() {
   $('.screenshot-wrapper, .error-message').fadeOut('fast');
   $('.pagination').empty().fadeOut('fast');
   $('body, a, .page-title, .top-nav, nav .input-field label.active i, ' +
-    'input, .metadata .swatch, #steam-friends-dropdown').removeAttr('style');
+    'input, .metadata .swatch, #steam-friends-dropdown, .page-footer').
+      removeAttr('style');
   $('.steam-user-nav').fadeOut('fast');
   $('.top-nav .steam-user-name, ' +
     '.top-nav .steam-app-name').fadeOut('fast').text('');
