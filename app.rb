@@ -9,7 +9,13 @@ end
 
 get '/image' do
   image_url = params[:url]
-  file = open(image_url)
+  begin
+    file = open(image_url)
+  rescue URI::InvalidURIError => ex
+    status 400
+    content_type 'text/plain'
+    return "URL #{image_url} is not valid."
+  end
   content_type file.content_type
   file
 end
