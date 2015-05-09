@@ -8,7 +8,12 @@ get '/' do
 end
 
 get '/image' do
-  image_url = params[:url]
+  raw_url = params[:url]
+  if query_start=raw_url.index('?')
+    image_url = raw_url[0...query_start]
+  else
+    image_url = raw_url
+  end
   begin
     file = open(image_url)
   rescue URI::InvalidURIError => ex
