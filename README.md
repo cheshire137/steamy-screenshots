@@ -2,14 +2,14 @@
 
 Uses a port of [Panic's iTunes album art color algorithm](http://www.panic.com/blog/2012/12/itunes-11-and-colors/) in JavaScript to get colors from a given Steam screenshot.
 
-![Screenshot](https://raw.githubusercontent.com/moneypenny/steamy-screenshots/master/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/cheshire137/steamy-screenshots/master/screenshot.png)
 
 ## How to Run
 
     cp env.sh.sample env.sh
 
 Edit env.sh to specify the URL to where your
-[Steam screenshots RSS feed app](https://github.com/moneypenny/steam-screenshots-rss)
+[Steam screenshots RSS feed app](https://github.com/cheshire137/steam-screenshots-rss)
 is hosted, as well as your [Steam web API key](http://steamcommunity.com/dev).
 
     npm install

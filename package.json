@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "git://github.com/moneypenny/steamy-screenshots.git"
+    "url": "git://github.com/cheshire137/steamy-screenshots.git"
   },
   "dependencies": {
     "lunr-index-build": "0.0.1"
