@@ -1,5 +1,7 @@
 # Steamy iTunes Colors
 
+**_Note:_ this project is deprecated in favor of [steam-palettes](https://steam-palettes.herokuapp.com/).**
+
 Uses a port of [Panic's iTunes album art color algorithm](http://www.panic.com/blog/2012/12/itunes-11-and-colors/) in JavaScript to get colors from a given Steam screenshot.
 
 ![Screenshot](https://raw.githubusercontent.com/cheshire137/steamy-screenshots/master/screenshot.png)
