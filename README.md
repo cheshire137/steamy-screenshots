@@ -28,7 +28,7 @@ Visit [localhost:9292](http://localhost:9292).
 
 ## How to Deploy to Heroku
 
-After pushing to Heroku, you need to set some environment variables:
+After pushing to Heroku with `git push heroku master`, you need to set some environment variables:
 
     heroku config:set RSS_SERVICE_URL=http://url-to-steam-screenshot-rss.com
     heroku config:set STEAM_API_KEY=your_steam_web_api_key
