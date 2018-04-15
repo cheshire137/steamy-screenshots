@@ -32,7 +32,8 @@ After pushing to Heroku with `git push heroku master`, you need to set some envi
 
     heroku config:set RSS_SERVICE_URL=http://url-to-steam-screenshot-rss.com
     heroku config:set STEAM_API_KEY=your_steam_web_api_key
-    heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git
+    heroku buildpacks:add https://github.com/heroku/heroku-buildpack-ruby.git
+    heroku buildpacks:add https://github.com/heroku/heroku-buildpack-nodejs.git
     heroku ps:scale web=1
 
 ## Thanks
